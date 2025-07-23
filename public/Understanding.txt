@@ -2,3 +2,4 @@ App kai ander page.js ko root component ya root routing bhi kehtai hai
 19:42
 https://www.youtube.com/watch?v=LVnc0fzNG6U&t=732s
 https://www.youtube.com/watch?v=lsLwiSlbQZY
+https://www.youtube.com/watch?v=1g32IlH3SUs
