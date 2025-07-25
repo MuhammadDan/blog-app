@@ -20,27 +20,33 @@ export const metadata = {
 const menus = [
   {
     label: 'Home',
-    href: '/'
+    href: '/',
+    button: false
   },
    {
     label: 'Article',
-    href: '/article'
+    href: '/article',
+    button: false
   },
    {
     label: 'About',
-    href: '/about'
+    href: '/about',
+    button: false
   },
-  {
-    label: 'Login',
-    href: '/login'
-  },
-  {
-    label: 'Signup',
-    href: '/signup'
-  },
+  // {
+  //   label: 'Login',
+  //   href: '/login',
+  //   button: false
+  // },
+  // {
+  //   label: 'Signup',
+  //   href: '/signup',
+  //   button: true
+  // },
   {
     label: 'Dashboard',
-    href: '/dashboard'
+    href: '/dashboard',
+    button: false
   },
 ]
 
@@ -50,14 +56,23 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <nav className="bg-white shadow-lg sticky top-0 left-0 w-full py-6">
-          <h1>AlgoAlchemy</h1>
-          <div>
+        <nav className="px-[7%] bg-white shadow-lg sticky top-0 left-0 w-full py-6 flex justify-between items-center">
+          <h1 className="text-left text-2xl font-bold">AlgoAlchemy</h1>
+          <div className="flex gap-5 justify-center flex-1 items-center">
           {
             menus.map((item,index)=>(
-              <Link key={index} href={item.href}>{item.label}</Link>
+              <Link key={index} href={item.href} className={item.button ? 'bg-violet-600 px-8 py-3 rounded text-white' : null}>{item.label}</Link>
             ))
           }
+          </div>
+          <div className="flex items-center gap-4">
+            <input type="text" placeholder="Search" className="border px-3 py-1 rounded-md" />
+            <Link href="/login">Login</Link>
+            <Link
+             href="/signup"
+             className="bg-violet-600 px-4 py-2 rounded text-white"
+             >Signup</Link>
+
           </div>
         </nav>
         <section>{children}</section>
