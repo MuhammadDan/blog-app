@@ -1,5 +1,17 @@
-App kai ander page.js ko root component ya root routing bhi kehtai hai
-19:42
+
+48:37
 https://www.youtube.com/watch?v=LVnc0fzNG6U&t=732s
 https://www.youtube.com/watch?v=lsLwiSlbQZY
 https://www.youtube.com/watch?v=1g32IlH3SUs
+https://themeforest.net/item/podcastio-multi-creator-podcasting-platform-react-website-template/52430046
+https://www.landingfolio.com/templates/post/siroon
+
+1. App kai ander page.js ko root component ya root routing bhi kehtai hai
+2. html jahan tyar hoga whn wo cache(means save) hojyega ager server mai bana to wahn cache hojyega ager broser pai bana to wahan cache hojyega.
+3. jab apka html server pai cache hota hai ya server pai tyar hota hai to wo kehlata hai server side rendering (SSR)
+4. ishi tarha browser pai tyar hona ya cache hona client side rendering (CSR).
+5. hum kaisai pata lagai gai kai yai website ka html (ui) kahan bani hai server pai y browser pai .
+               ager website kai UI mai jo text dekh raha hai ager wo "view page source" pai mila ager mila to server pai bana hai
+               ager nahi mila to browser pai ui bana hai
+               "Reactjs" mai jo ap code likhtai ho uska UI browser pai banta hai islyai wo UI ka content view page source pai nahi dekhai ga.
+               "Nextjs" mai ap code likhtai ho o uska UI server pai banta hai isliyai UI ka content view page source mai dekhai ga. 

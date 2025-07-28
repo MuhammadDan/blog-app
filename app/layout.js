@@ -45,7 +45,7 @@ const menus = [
   // },
   {
     label: 'Dashboard',
-    href: '/dashboard',
+    href: '/Dashboard',
     button: false
   },
 ]
@@ -57,7 +57,7 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <nav className="px-[7%] bg-white shadow-lg sticky top-0 left-0 w-full py-6 flex justify-between items-center">
-          <h1 className="text-left text-2xl font-bold">AlgoAlchemy</h1>
+          <Link href="/" className="text-left text-2xl font-bold">AlgoAlchemy</Link>
           <div className="flex gap-5 justify-center flex-1 items-center">
           {
             menus.map((item,index)=>(
@@ -75,8 +75,8 @@ export default function RootLayout({ children }) {
 
           </div>
         </nav>
-        <section>{children}</section>
-        <footer>my Footer</footer>
+        <section className="px-[5%] py-[10%]">{children}</section>
+        <footer className="bg-gray-200 h-[450px] flex items-center justify-center text-3xl">my Footer</footer>
       </body>
     </html>
   );
