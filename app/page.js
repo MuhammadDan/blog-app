@@ -1,11 +1,11 @@
-
+import Home from '@/component/Home';
 export const metadata = {
   title: "Homepage"
 }
-export default function Home() {
+export default function Homepage() {
   return (
     <>
-    Welcome to Homepage
+    <Home />
     </>
   )
 }

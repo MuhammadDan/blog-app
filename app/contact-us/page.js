@@ -1,9 +1,11 @@
-import React from 'react'
+import Contactus from "@/component/Contactus"
 
-const contactus = () => {
+const contactusRoute = () => {
   return (
-    <div>contactus</div>
+    <div>
+      <Contactus />
+    </div>
   )
 }
 
-export default contactus
+export default contactusRoute

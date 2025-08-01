@@ -1,9 +1,9 @@
-import React from 'react'
+import About from "@/component/About"
 
-const about = () => {
+const aboutRoute = () => {
   return (
-    <div>Welcome to About page</div>
+    <About />
   )
 }
 
-export default about
+export default aboutRoute

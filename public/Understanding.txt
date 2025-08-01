@@ -15,3 +15,18 @@ https://www.landingfolio.com/templates/post/siroon
                ager nahi mila to browser pai ui bana hai
                "Reactjs" mai jo ap code likhtai ho uska UI browser pai banta hai islyai wo UI ka content view page source pai nahi dekhai ga.
                "Nextjs" mai ap code likhtai ho o uska UI server pai banta hai isliyai UI ka content view page source mai dekhai ga. 
+6. Kuch language hotai hai jismai bydefault SSR hota hai.
+                Jesai "ReactJS" mai SSR nahi hai to iskai lyai "NextJS" hai
+                Jesai "VueJS" kai lyai "NustJS" hai
+                Jesai "Angular" kai lyai "Universal" hai
+                jab apka html server par hoga to ap SEO implement kar paogai.
+7. Ager ap 100% SEO Friendly website bana chatai ho ya to website ko "HTML" mai banao ya "PHP" mai banao ya "ASP.NET" pai banao.
+8. Main nai NEXTJS kai ksi page pai useState lagaya to error aya .kyu?
+                 bydefault NEXTJS mai ap jo bhi UI ka code dekho gai wo server par base karta hai.to window or document server pai hota hai nahi. window or document 
+                 object browser par hota hota hai .
+                    window--> bom
+                    document-->dom
+                to yai jo hooks hai (usestate etc) yai kahi na kahi bom or dom use kartai hai. to yai server par kesai execute karega.to ab jab koi esi chez import karega jis kai 
+                lyai server execute nahi horaha to error ayega. NEXTJS apko directory provide karta hai "useclient" kai nam sai. To jo chez server pai chalni hogi wo server pai chalai gai
+                or jo chez browser pai chalni hogi wo browser pai chalaigi.
+9. alias "@" iska use karai link karanai kai lyai isai client component tezi sai render hotai hai.

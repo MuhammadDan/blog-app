@@ -1,9 +1,9 @@
-import React from 'react'
+import Article from "@/component/Article"
 
-const article = () => {
+const articleRoute = () => {
   return (
-    <div>Welcome to Article page</div>
+    <Article/>
   )
 }
 
-export default article
+export default articleRoute

@@ -1,9 +1,11 @@
-import React from 'react'
+import login from "@/component/login"
 
-const loginpage = () => {
+const loginpageRoute = () => {
   return (
-    <div>Login page</div>
+    <div>
+      <login />
+    </div>
   )
 }
 
-export default loginpage
+export default loginpageRoute

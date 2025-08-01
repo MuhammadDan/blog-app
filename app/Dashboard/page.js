@@ -1,9 +1,11 @@
-import React from 'react'
+import Dashboard from "@/component/Dashboard"
 
-const Dashboard = () => {
+const DashboardRoute = () => {
   return (
-    <div>Welcome to Dashboard page </div>
+    <div> 
+      <Dashboard />
+    </div>
   )
 }
 
-export default Dashboard
+export default DashboardRoute
