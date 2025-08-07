@@ -1,5 +1,5 @@
 
-48:37
+1:16:00
 https://www.youtube.com/watch?v=LVnc0fzNG6U&t=732s
 https://www.youtube.com/watch?v=lsLwiSlbQZY
 https://www.youtube.com/watch?v=1g32IlH3SUs
@@ -30,3 +30,12 @@ https://www.landingfolio.com/templates/post/siroon
                 lyai server execute nahi horaha to error ayega. NEXTJS apko directory provide karta hai "useclient" kai nam sai. To jo chez server pai chalni hogi wo server pai chalai gai
                 or jo chez browser pai chalni hogi wo browser pai chalaigi.
 9. alias "@" iska use karai link karanai kai lyai isai client component tezi sai render hotai hai.
+
+                      Topic: USECLIENT 
+10. Useclient ka use ap routing mai nahi karpao gai.
+11. ap nai component walai folder mai "useState" import kiya to wo error dai ga isliyai apko "useClient" laga diya to ap error nahi ayega.
+                useState component folder mai chalai ga na kai app folder mai. iska matlab yai nahi hai kai 
+
+                   Topic: usepathname hooks
+12. usepathname hook isliyai use hota hai takai console mai dekh sakai kai abhi hum consai page pai hai islyai layout jo app folder mai tha uskai saarai code ko copy kiya 
+         or component folder mai aik or Layout.jsx banaya usmai sara code rakha or wahn pai usePathname hook use kiya 
