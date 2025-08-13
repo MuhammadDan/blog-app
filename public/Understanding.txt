@@ -39,3 +39,12 @@ https://www.landingfolio.com/templates/post/siroon
                    Topic: usepathname hooks
 12. usepathname hook isliyai use hota hai takai console mai dekh sakai kai abhi hum consai page pai hai islyai layout jo app folder mai tha uskai saarai code ko copy kiya 
          or component folder mai aik or Layout.jsx banaya usmai sara code rakha or wahn pai usePathname hook use kiya 
+
+13.ap mai chata ho kai login or signup kai page mai header or footer na dekhai to mai nai aik array banaya usmai login or signup ka href dal diya or pathname sai compare karaya. 
+         array kai ander kuch chez find karna hai to "includes" lagao isay tum array mai chez find karpao gai to jab compare karaya ager jab bhi login ya signup ka href aya to 
+         header or footer nahi dekhai ga href dekhai ga 
+
+14. Ant design lagaya hai signup page or login page banai kai lyai to jesai hi ant design attach kiya to kuch problem aye jisko hamesha yad rakhna 
+             1. you in google search "ant design nextjs 14" and  run command "npm install @ant-design/nextjs-registry --save" and import sentence on layout.js and antregistry sai wrap
+             karna  layout ko.
+             2.jab ap antdesign laga tai ho tailwindcss kaam karna band kadeta hai. (yai zyda major problem nahi hai.) 

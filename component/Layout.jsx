@@ -7,17 +7,14 @@ const menus = [
   {
     label: 'Home',
     href: '/',
-    button: false
   },
    {
     label: 'Article',
     href: '/article',
-    button: false
   },
    {
     label: 'About',
     href: '/about',
-    button: false
   },
   // {
   //   label: 'Login',
@@ -32,14 +29,26 @@ const menus = [
   {
     label: 'Dashboard',
     href: '/Dashboard',
-    button: false
   },
 ]
 
 const Layout = ({children}) => {
     const pathname = usePathname()
     console.log(pathname)
+
+    const blacklist = [
+      '/login',
+      '/signup'
+    ]
     
+const isBlacklist = blacklist.includes(pathname)
+
+if(isBlacklist)
+  return(
+<div>
+  {children}
+</div>
+)
   return (
     <>
      <nav className="px-[7%] bg-white shadow-lg sticky top-0 left-0 w-full py-6 flex justify-between items-center">
@@ -47,7 +56,7 @@ const Layout = ({children}) => {
           <div className="flex gap-5 justify-center flex-1 items-center">
           {
             menus.map((item,index)=>(
-              <Link key={index} href={item.href} className={`px-3 ${pathname == item.href ? "text-violet-600" : ""}`}>{item.label}</Link>
+              <Link key={index} href={item.href} className={`px-3 ${pathname == item.href ? "text-violet-600 font-medium" : "text-black font-normal"}`}>{item.label}</Link>
             ))
           }
           </div>

@@ -1,4 +1,5 @@
-import login from "@/component/login"
+import Login from "@/component/Login"
+
 export const metadata = {
   title: 'loginpage'
 }
@@ -6,7 +7,7 @@ export const metadata = {
 const loginpageRoute = () => {
   return (
     <div>
-      <login />
+      <Login />
     </div>
   )
 }
