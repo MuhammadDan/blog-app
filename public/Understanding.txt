@@ -1,10 +1,12 @@
 
-1:36:00
+1:48:09
+https://www.youtube.com/watch?v=2TndlokaEZg&list=PLewGdhs0k9xFAc6ukYy8c9ZOGJ8LgBPfr&index=1
 https://www.youtube.com/watch?v=LVnc0fzNG6U&t=732s
 https://www.youtube.com/watch?v=lsLwiSlbQZY
 https://www.youtube.com/watch?v=1g32IlH3SUs
 https://themeforest.net/item/podcastio-multi-creator-podcasting-platform-react-website-template/52430046
 https://www.landingfolio.com/templates/post/siroon
+https://v0.app/chat/next-js-signup-form-puLt3GxSJKE
 
 1. App kai ander page.js ko root component ya root routing bhi kehtai hai
 2. html jahan tyar hoga whn wo cache(means save) hojyega ager server mai bana to wahn cache hojyega ager broser pai bana to wahan cache hojyega.
@@ -48,3 +50,4 @@ https://www.landingfolio.com/templates/post/siroon
              1. you in google search "ant design nextjs 14" and  run command "npm install @ant-design/nextjs-registry --save" and import sentence on layout.js and antregistry sai wrap
              karna  layout ko.
              2.jab ap antdesign laga tai ho tailwindcss kaam karna band kadeta hai. (yai zyda major problem nahi hai.) 
+15. "UI" mai har folder kai ander "page.js" nam ka file banta hai likn "api" walai folder kai ander "route.js" nm ka file banta hai. 
