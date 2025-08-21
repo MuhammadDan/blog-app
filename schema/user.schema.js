@@ -1,4 +1,3 @@
-import Password from "antd/es/input/Password";
 import mongoose, {Schema} from "mongoose";
 
 const userSchema = new Schema({
@@ -19,5 +18,6 @@ const userSchema = new Schema({
     }
 })
 
-const UserSchema = mongoose.model('User',userSchema) // collecion ka nam hojyega "User"
+// const UserSchema = mongoose.model('User',userSchema) 
+const UserSchema = mongoose.models.User || mongoose.model('User',userSchema) 
 export default UserSchema

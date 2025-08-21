@@ -1,5 +1,5 @@
 
-1:53:50
+1:54:42
 https://www.youtube.com/watch?v=q8fHowK_qHQ
 https://www.youtube.com/watch?v=2TndlokaEZg&list=PLewGdhs0k9xFAc6ukYy8c9ZOGJ8LgBPfr&index=1
 https://www.youtube.com/watch?v=LVnc0fzNG6U&t=732s
@@ -115,7 +115,39 @@ Kyu likha:
       - Tu test kar raha hai ke tera backend route kaam kar raha hai ya nahi.
       - res.json({ success: true }) ek simple response bhejta hai frontend ko — yeh confirm karta hai ke route aur DB connection sahi chal rahe hain.
 
-
-
-
+20. Aik zaroor error jo hamsha yad rakhna aj mai nai apna code khula to jesai hi url mai likha "http://localhost:3000/api/signup" to error aya overwrite ka isarha.
+         "OverwriteModelError: Cannot overwrite `User` model once compiled.". iska matlab hai ke aap Mongoose model ko multiple dafa define kar rahe ho.
+         Problem:
+            Har dafa jab Next.js ke andar API route reload hota hai (Hot Reload / Dev mode), mongoose.model("User", userSchema) dobara run hota hai. Mongoose allow nahi karta 
+            ke ek hi model bar bar overwrite ho kal to mera sahi tha bcz kal mai nai banaya tha API to wo phli bar ha isliyai koi error nahi aya likn aglai din dobara khola to error 
+            aya bcz wohi api dobara reload hoi islyai
+         Fix:
+            Aapko model export karte waqt pehle check karna chahiye ke agar model pehle se defined hai toh use reuse kar lo, warna naya define karo.Aapka user.schema.js is
+            tarah likho:
+            - pehlai esa ha jiski wajah sai error aya jab dobara reload hoa api : const UserSchema = mongoose.model('User',userSchema) 
+            - to is error ko fix karnai kai lyai yai changes karo : const UserSchema = mongoose.models.User || mongoose.model("User", userSchema);
+         Kyun?
+            mongoose.models ke andar pehle se loaded models hote hain.
+            Jab reload ya multiple imports hoti hain, ye ensure karta hai ke model dobara define na ho.
+    likn phir bhi yai error solve nahi hoa yai changes kai baad bhi ab yai error aya 
+         "Abhi aapko jo HTTP ERROR 405 aa raha hai iska matlab hai:
+            👉 Aap browser se direct /api/signup page ko open kar rahe ho, lekin aapke route.js mein sirf POST method allowed hai:"
+            - error jab arha tha us waqt code mai yai likh rraha tha 
+                  export const POST = async (request) => {
+                     try {
+                        const body = await request.json()
+                        return res.json(body)
+                     } catch (err) {
+                        console.log(err);
+                     }
+                  }
+               Jab browser se URL hit karte ho (address bar mein likh ke enter), woh GET request bhejta hai 🚨
+               Lekin aapne GET method implement hi nahi kiya, isliye 405 Method Not Allowed aa raha hai.
+            
+           ✅ Solutions
+               Agar chahte ho ke browser se bhi test ho jaye (GET request pe bhi kuch return ho):
+               Apne route.js mein GET bhi add kar do: 
+                  export const GET = async () => {
+                      return res.json({ message: "Signup API is working. Use POST to send data." });
+                  }
 
