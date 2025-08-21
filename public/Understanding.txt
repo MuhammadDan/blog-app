@@ -150,4 +150,84 @@ Kyu likha:
                   export const GET = async () => {
                       return res.json({ message: "Signup API is working. Use POST to send data." });
                   }
+21. abhi mai nai nextjs kai project mai "bcrypt install" kiya hai woh kiya hota hai.
+       🔐 bcrypt ek widely-used library hai jo passwords ko securely hash karne ke liye use hoti hai. Jab user koi password enter karta hai (signup ya login ke time), 
+       us password ko directly database mai store karna risky hota hai. Isliye hum usay hash karte hain — aur yahan bcrypt ka role shuru hota hai.
+       🔍 Bcrypt ka kaam kya hota hai?
+            - Password Hashing:
+                  Original password ko ek unreadable format mai convert karta hai (hash).
+                  Example: "mypassword" → "$2b$10$X9s...randomstring"
+            - Salt Add karta hai:
+                  Salt ek random string hoti hai jo har password ke sath add hoti hai taake same password ka bhi hash different ho.
+            - Compare Function:
+                  Jab user login karta hai, bcrypt original password ko hash karta hai aur database wale hash se compare karta hai.
+22.  userSchema.pre("save",function(next){ 
+         console.log(this.password) 
+      }) yar mai nai yai line add ki hai user.schema.js mai  is ki wajah baao mujhai
+       Tu userSchema.pre("save", ...) ka use kar raha hai, jo Mongoose ka middleware hook hota hai. Iska matlab hai: jab bhi koi User document save hone wala hota hai 
+       (e.g. signup ke waqt), yeh function automatically run hota hai save se pehle.
+         - pre("save"): Yeh ek hook hai jo save() method se pehle trigger hota hai.
+         - this.password: Yeh current user document ka password field access kar raha hai.
+         - console.log(...): Sirf check karne ke liye print kar raha hai ke password field mai kya value hai.
+         - next(): Yeh function batata hai ke middleware complete ho gaya, ab agla step chalu karo (warna save ruk jayega).
+23. userSchema.pre("save",async function(next){
+      const encrypted = await bcrypt.hash(this.password.toString(),12)
+      this.password = encrypted
+      next()
+    // console.log(this.password)
+}) iska Pichai ka full logic batao kyu yai likha?
+       Yeh line jo tu likh raha hai, woh password ko securely hash karne ke liye hai jab user signup karta hai.
+       🧠 Step-by-Step Roman Urdu Explanation:
+             1. userSchema.pre("save", ...)
+             - Jab bhi koi new user database mai save hone wala hota hai (e.g. signup ke waqt), yeh function automatically chal jata hai.
+             - Yeh Mongoose ka middleware hook hai — matlab save hone se pehle kuch kaam karna.
+             2. this.password.toString()
+             - this.password ka matlab hai: jo password user ne diya hai.
+             - .toString() sirf ensure karta hai ke password string format mai ho (kabhi kabhi agar number ya Buffer ho toh error na aaye).
+             3. bcrypt.hash(...)
+             - Yeh function password ko hash karta hai — matlab unreadable format mai convert karta hai.
+             - 12 is called salt rounds — jitna zyada number, utna zyada secure (but thoda slow bhi hota hai).
+             - Example: "mypassword" → "$2b$12$X9s...randomstring"
+             4. this.password = encrypted
+             - Ab original password ko replace kar diya gaya hai hashed version se.
+             - Matlab: database mai ab plain password nahi ja raha — sirf encrypted version store ho raha hai.
+             5. next()
+             - Yeh batata hai ke middleware ka kaam complete ho gaya — ab actual save() operation chalu karo.
+
+             ✅ Final Result:
+             - Jab user signup karega, uska password securely hash ho kar database mai store hoga.
+             - Agar koi hacker DB access kare bhi, toh password samajh nahi aayega.
+             - Login ke waqt tu bcrypt.compare() use karega to match original password with hashed one.
+      or yai poa code kyu likha ?
+            Yeh poora code likhne ka main purpose hai: user ka password securely store karna taake koi bhi attacker ya unauthorized banda usay samajh na sake — even agar database
+            leak ho jaye.Chalo isay ek real-world misaal se samajhtay hain:
+      🧑‍💻 Imagine This Scenario:
+            Tu ek blog website bana raha hai Next.js ke backend pe. Jab koi user signup karta hai, woh apna password deta hai — for example: "pakistan123".
+            Agar tu yeh password directly database mai save kar de, toh:
+            - Hacker agar DB access kar le, toh woh easily sab users ke passwords dekh sakta hai.
+            - Yeh security breach hoga — aur trust bhi khatam ho jata hai.
+            🔐 Isliye yeh code likha gaya:
+       userSchema.pre("save", async function(next) {
+         const encrypted = await bcrypt.hash(this.password.toString(), 12);
+         this.password = encrypted;
+         next();
+       });
+
+
+     Yeh kya karta hai?
+         - Before saving user to DB, yeh password ko encrypt karta hai using bcrypt.
+         - bcrypt.hash() password ko unreadable format mai convert karta hai — jese:
+         "pakistan123" → "$2b$12$X9s...randomstring"
+         - Phir woh encrypted password DB mai save hota hai — not the original one.
+
+     🛡️ Benefits:
+         - Hacker ko sirf encrypted strings milengi — asli password nahi.
+         - Tu login ke waqt bcrypt.compare() use karega to match user input with encrypted password.
+         - Yeh industry-standard practice hai — har secure app (Facebook, GitHub, etc.) yeh hi karti hai.
+
+
+
+
+
+
 
