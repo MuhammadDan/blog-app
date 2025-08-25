@@ -9,7 +9,9 @@ const userSchema = new Schema({
     email: {
         type: String,
         required: true,
-        trim: true
+        trim: true,
+        unique: true,
+        index: 1
     },
     password: {
         type: String,

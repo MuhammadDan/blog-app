@@ -8,8 +8,9 @@ export const POST = async(request)=>{
         const body = await request.json()
         const user = new UserSchema(body)
         await user.save() 
-        return res.json(user)
+        return res.json({success: true})
         // return res.json(body)
+        // hum ko signup hojanai kai bath nahi behjna hai user ka information "res.json(user) " to res.json kai round bracket sai user ko hatai gai or success ki value behjai gai
     } catch (err) {
         // console.log(err);
         return res.json(
