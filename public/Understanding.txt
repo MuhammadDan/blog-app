@@ -1,5 +1,5 @@
 
-2:17:43
+2:25:43
 https://www.youtube.com/watch?v=2TndlokaEZg&list=PLewGdhs0k9xFAc6ukYy8c9ZOGJ8LgBPfr&index=1
 https://www.youtube.com/watch?v=LVnc0fzNG6U&t=732s
 https://www.youtube.com/watch?v=lsLwiSlbQZY
@@ -224,8 +224,60 @@ Kyu likha:
          - Tu login ke waqt bcrypt.compare() use karega to match user input with encrypted password.
          - Yeh industry-standard practice hai — har secure app (Facebook, GitHub, etc.) yeh hi karti hai.
 
+24. signup route ki undestanding
+  export const GET = async () => {
+   return res.json({ message: "Signup API is working. Use POST method to send data." })
+ }
+ yai promise return karta hai islyai await lagaya hai 
 
+   const user = new UserSchema(body) --> jo data userSchema mai save hoa hoga wo res.json ki help sai retun hojyega  
+        await user.save() 
+        return res.json(user)
 
+25. login route ki understanding 
+   pehlai user mach hoa aik email find kiya mai nai ager email find nahi hoa to user par null ayega to null kai case mai user no found 404
+     ager email majood hoga to password ko match karai gai (const isLogin = await bcrypt.compare(password, user.password);) to jo type hoa hai password (password) or jo database mai password hai(user.password) ager is login mai true aya 
+    or ager false aya to code wapis return kar jyega (if(!isLogin){
+         return res.json(
+            {success: false, message: 'Incorrect password'},
+            {status: 401}
+          ) 
+        })
+        or ager yai code nahi chala to password match kar gaya yani yai wala code chala phir ( return res.json({success: true})  )
+
+26. abhi mai json.webtoken install kiya hai woh kiya hoa hai?
+   `jsonwebtoken` ek npm package hai jo **JWT (JSON Web Token)** bananay aur verify karnay ke liye use hota hai — aur ye authentication flows ka king hai 🔐
+
+   ### 🧠 JWT hota kya hai?
+   JWT ek **secure token** hota hai jo client aur server ke darmiyan user ki identity ko verify karne ke liye use hota hai
+   . Ye token teen parts mein hota hai:
+
+   1. **Header** – Algorithm aur token type batata hai  
+   ```json
+   { "alg": "HS256", "typ": "JWT" }
+   ```
+
+   2. **Payload** – User ki info hoti hai (jaise `id`, `role`, `exp`)  
+   ```json
+   { "userId": "123", "role": "admin", "exp": 1693500000 }
+   ```
+
+   3. **Signature** – Server secret key se sign hoti hai taake koi token ko tamper na kar sake
+
+   ### 🔄 JWT kaam kaise karta hai?
+   1. **Login ke baad** server JWT generate karta hai
+   2. **Client** (browser/app) token ko store karta hai (localStorage ya cookie mein)
+   3. Har protected request ke sath client JWT bhejta hai (usually `Authorization` header mein)
+   4. Server token verify karta hai aur agar valid ho to request process karta hai
+
+   ### 🔐 JWT ka faida?
+   - Stateless authentication (session store nahi karna padta)
+   - Secure data transmission
+   - Easy to use with REST APIs
+
+   Agar tu backend authentication bana raha hai (jaise login/signup routes), to `jsonwebtoken` teri backbone ban sakti hai.
+
+27. (require("crypto").randomBytes(32).toString("hex"))" abhi yai mai nai terminal pai likha hai
 
 
 

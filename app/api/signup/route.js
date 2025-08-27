@@ -19,12 +19,3 @@ export const POST = async(request)=>{
         )
     }
 }
-
-// export const GET = async () => {
-//   return res.json({ message: "Signup API is working. Use POST method to send data." })
-// }
-// yai promise return karta hai islyai await lagaya hai 
-
-//   const user = new UserSchema(body) --> jo data userSchema mai save hoa hoga wo res.json ki help sai retun hojyega  
-//        await user.save() 
- //       return res.json(user)
