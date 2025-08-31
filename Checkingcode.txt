@@ -1,0 +1,220 @@
+1st code(original code)
+
+You said:
+import UserSchema from "@/schema/user.schema";
+import { NextResponse as res } from "next/server";
+import bcrypt from 'bcrypt';
+import jwt from "jsonwebtoken";
+
+const getToken = (payload)=>{
+  const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '15m'})
+  const refreshToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '7d'})
+   return{
+    accessToken,
+    refreshToken
+   }
+}
+
+export const POST = async (request) => {
+  try {
+    const {email, password} = await request.json();
+    const user = await UserSchema.findOne({email})
+    if(!user){
+        return res.json(
+            {success: false, message: "User doesn't exist"},
+            {status: 404}
+        ) // yai to password ager match nahi kiya
+      }
+        const isLogin = await bcrypt.compare(password, user.password);
+
+        if(!isLogin){
+          return res.json(
+            {success: false, message: 'Incorrect password'},
+            {status: 401}
+          ) 
+        }
+        const token = getToken({
+          fullname: user.fullname,
+          email: user.email
+        })
+        console.log(token);
+        return res.json({success: true})  
+  } catch (err) {
+    return res.json({ success: false }, { status: 500 });
+  }
+};
+
+2nd code
+
+import UserSchema from "@/schema/user.schema";
+import { NextResponse } from "next/server";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+
+const getToken = (payload) => {
+  const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
+    expiresIn: "15m",
+  });
+  const refreshToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
+    expiresIn: "7d",
+  });
+  return {
+    accessToken,
+    refreshToken,
+  };
+};
+
+export const POST = async (request) => {
+  try {
+    console.log("STEP 1: Parsing body...");
+    const { email, password } = await request.json();
+    console.log("STEP 2: Got body", { email, password });
+
+    console.log("STEP 3: Finding user in DB...");
+    const user = await UserSchema.findOne({ email });
+    console.log("STEP 4: Found user", user);
+
+    if (!user) {
+      console.log("STEP 5: No user found");
+      return NextResponse.json(
+        { success: false, message: "User doesn't exist" },
+        { status: 404 }
+      ); // yai to password ager match nahi kiya
+    }
+    console.log("STEP 6: Comparing password...");
+    const isLogin = await bcrypt.compare(password, user.password);
+    console.log("STEP 7: Password matched?", isLogin);
+    if (!isLogin) {
+       console.log("STEP 8: Wrong password");
+      return NextResponse.json(
+        { success: false, message: "Incorrect password" },
+        { status: 401 }
+      );
+    }
+    console.log("STEP 9: Generating token...");
+    const token = getToken({
+      fullname: user.fullname,
+      email: user.email,
+    });
+     console.log("STEP 10: Token generated", token);
+    return NextResponse.json({ success: true, token }, { status: 200 });
+  } catch (err) {
+    console.error("🔥 ERROR in POST /api/login:", err);
+    return NextResponse.json(
+      { success: false, message: "Intenal server error" },
+      { status: 500 }
+    );
+  }
+};
+
+3rd code or checking
+import dbConnect from "@/lib/db";
+import UserSchema from "@/schema/user.schema";
+import { NextResponse } from "next/server";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+
+// Token generator
+const getToken = (payload) => {
+  if (!process.env.ACCESS_TOKEN_SECRET) {
+    throw new Error("ACCESS_TOKEN_SECRET is not defined in .env.local");
+  }
+
+  const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
+    expiresIn: "15m",
+  });
+  const refreshToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
+    expiresIn: "7d",
+  });
+  return {
+    accessToken,
+    refreshToken,
+  };
+};
+
+export const POST = async (request) => {
+  try {
+    console.log("STEP 1: Parsing request body...");
+    
+    let email, password;
+    try {
+      ({ email, password } = await request.json());
+    } catch (e) {
+      console.error("❌ Error parsing JSON body:", e);
+      return NextResponse.json(
+        { success: false, message: "Invalid JSON body" },
+        { status: 400 }
+      );
+    }
+
+    console.log("STEP 2: email & password received", { email, password });
+
+    // DB lookup
+    let user;
+    try {
+      user = await UserSchema.findOne({ email });
+    } catch (e) {
+      console.error("❌ Error querying DB:", e);
+      return NextResponse.json(
+        { success: false, message: "Database error" },
+        { status: 500 }
+      );
+    }
+
+    console.log("STEP 3: User found?", user);
+
+    if (!user) {
+      return NextResponse.json(
+        { success: false, message: "User doesn't exist" },
+        { status: 404 }
+      );
+    }
+
+    // Password check
+    let isLogin = false;
+    try {
+      isLogin = await bcrypt.compare(password, user.password);
+    } catch (e) {
+      console.error("❌ Error comparing password:", e);
+      return NextResponse.json(
+        { success: false, message: "Password compare failed" },
+        { status: 500 }
+      );
+    }
+
+    console.log("STEP 4: Password correct?", isLogin);
+
+    if (!isLogin) {
+      return NextResponse.json(
+        { success: false, message: "Incorrect password" },
+        { status: 401 }
+      );
+    }
+
+    // Token generation
+    let token;
+    try {
+      token = getToken({
+        fullname: user.fullname,
+        email: user.email,
+      });
+    } catch (e) {
+      console.error("❌ Error generating token:", e);
+      return NextResponse.json(
+        { success: false, message: e.message },
+        { status: 500 }
+      );
+    }
+
+    console.log("STEP 5: Token generated", token);
+
+    return NextResponse.json({ success: true, token }, { status: 200 });
+  } catch (err) {
+    console.error("🔥 UNEXPECTED ERROR:", err);
+    return NextResponse.json(
+      { success: false, message: err.message || "Internal server error" },
+      { status: 500 }
+    );
+  }
+};
+
