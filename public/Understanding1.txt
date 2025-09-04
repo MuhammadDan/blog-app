@@ -1,0 +1,119 @@
+30. yai cod likhnai sai postman mai cookies ana shru hogai
+      const result = NextResponse.json({ success: true,  token}, { status: 200 })
+
+    result.cookies.set("accessToken",token.accessToken, {
+      httpOnly: true,
+      secure: process.env.PROD === "true" ? true : false,
+      path: "/", 
+      domain: 'localhost'
+    })
+    // optional, default is "/"
+    result.cookies.set("refreshoken", token.refreshToken, {
+      httpOnly: true,
+      secure: process.env.PROD === "true"? true : false,
+      path: "/",
+      domain: 'localhost'
+    })
+    Yeh code JWT tokens ko **cookie ke through client ko securely bhejne** ke liye likha gaya hai. Chalo isko **line-by-line Roman Urdu mein** breakdown karte hain 👇
+     
+     ---
+     
+     ### 🍪 **JWT Tokens ko Cookies mein Set Karna (Secure Login Flow)**
+     
+     ---
+     
+     ```javascript
+     const result = NextResponse.json({ success: true, token }, { status: 200 });
+     ```
+     ➡️ Yeh response object banaya ja raha hai:
+     - `success: true` batata hai ke login successful hua.
+     - `token` mein access aur refresh token dono honay chahiye.
+     - `status: 200` ka matlab hai OK response.
+     
+     ---
+     
+     ```javascript
+     result.cookies.set("accessToken", token.accessToken, {
+       httpOnly: true,
+       secure: process.env.PROD === "true" ? true : false,
+       path: "/",
+       domain: "localhost"
+     });
+     ```
+     
+     ➡️ **Access token ko cookie mein set kar rahe ho**:
+     - `"accessToken"` — cookie ka naam.
+     - `token.accessToken` — JWT token jo tumne pehle generate kiya.
+     - `httpOnly: true` — JavaScript se access nahi ho sakta (XSS se protection).
+     - `secure: process.env.PROD === "true" ? true : false` — agar production mode hai toh HTTPS required hoga.
+     - `path: "/"` — cookie har route pe accessible hogi.
+     - `domain: "localhost"` — sirf localhost pe valid hai (production mein isko change karna hoga).
+     
+     ---
+     
+     ```javascript
+     result.cookies.set("refreshoken", token.refreshToken, {
+       httpOnly: true,
+       secure: process.env.PROD === "true" ? true : false,
+       path: "/",
+       domain: "localhost"
+     });
+     ```
+     
+     ➡️ **Refresh token ko bhi cookie mein set kar rahe ho**:
+     - `"refreshoken"` — thoda typo hai, shayad `"refreshToken"` hona chahiye.
+     - `token.refreshToken` — long-lived token jo session renew karne ke kaam aata hai.
+     - Baaki options same hain: `httpOnly`, `secure`, `path`, `domain`.
+     
+     ---
+31.  
+   Apko nextjs mai redirect kani kai lyai to usouer ko import kana hoga acha useRouter do way sai hota hai navigation and routr sai
+   to jab bhi useRouter app folder ki routing mai use karai gai o import hoga next router likn age component mai useRouter use karai gai
+   to usenavigation use karai gai
+
+32. Jab bhi apko ksi userinterface pai janai sai pehlai koi decision laina hai
+    token verification ka  ya koi security ka to iskai lyai middlewear banatai hai .Yai apko seup karna hoga kai middleware kis file kai pehlai chalai
+     mai chata ho admin file sai peehlai middleware ka code chalai.   
+       yai uska code hai
+                export const config = {
+                    matcher: '/admin/:path*',
+                }
+                export const middleware = (request) => {
+                    console.log("Welcome to Middleware");
+          
+                } 
+           Yeh code **Next.js ka middleware setup** dikhata hai — jo specific route pe custom logic run karta hai jaise authentication, logging, etc. Chalo isko **line-by-line Roman Urdu mein** samjhaata hoon 👇
+
+         ---
+         
+         ### ⚙️ `config` Object — Middleware kis route pe chalega
+         
+         ```javascript
+         export const config = {
+           matcher: '/admin/:path*',
+         }
+         ```
+         
+         ➡️ **Yeh batata hai ke middleware kis route pe apply hoga**:
+         
+         - `matcher: '/admin/:path*'` ka matlab hai:
+           - Middleware sirf `/admin` route aur uske subroutes pe chalega.
+           - Example: `/admin`, `/admin/dashboard`, `/admin/settings` — sab covered hain.
+         - `:path*` ka matlab hai "zero ya more segments" — yani nested routes bhi match honge.
+         
+         ---
+         
+         ### 🧩 `middleware` Function — Jo har request pe chalega
+         
+         ```javascript
+         export const middleware = (request) => {
+           console.log("Welcome to Middleware");
+         }
+         ```
+         
+         ➡️ **Yeh actual middleware function hai**:
+         
+         - `request` object represent karta hai incoming HTTP request.
+         - `console.log("Welcome to Middleware")` sirf ek message print kar raha hai — yeh debugging ke liye helpful hai.
+         - Abhi koi logic nahi likha gaya — lekin yahan tum JWT check kar sakte ho, user role verify kar sakte ho, ya unauthorized users ko redirect bhi kar sakte ho.
+         

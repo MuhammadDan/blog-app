@@ -1,12 +1,11 @@
 "use client";
-import {  Card, Form, Input } from "antd";
+import {  Card, Form, Input, message } from "antd";
 import { Lock, Mail, Plus, User } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
 const Signup = () => {
   const signupvalue = (values) => {
-    console.log(values);
   };
   return (
     <div className="flex bg-gray-100 h-screen justify-center items-center">

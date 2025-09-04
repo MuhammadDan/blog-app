@@ -60,7 +60,20 @@ export const POST = async (request) => {
         {expiresIn: '7d'}
       ),
     };
-    return NextResponse.json({ success: true,  token}, { status: 200 });
+     const result = NextResponse.json({ success: true,  token}, { status: 200 })
+
+    result.cookies.set("accessToken",token.accessToken, {
+      httpOnly: true,
+      secure: process.env.PROD === "true" ? true : false,
+      path: "/", 
+    })
+    // optional, default is "/"
+    result.cookies.set("refreshoken", token.refreshToken, {
+      httpOnly: true,
+      secure: process.env.PROD === "true"? true : false,
+      path: "/",
+    })
+    return result;
   } catch (err){
     console.error("Error during login:", err);
     return NextResponse.json(

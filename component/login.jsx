@@ -1,12 +1,20 @@
 "use client";
-import {  Card, Form, Input } from "antd";
+import {  Card, Form, Input, message } from "antd";
 import { Lock, LogIn, Mail, Plus, User } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import axios from "axios";
 import React from "react";
 
 const Login = () => {
-  const loginvalue = (values) => {
-    console.log(values);
+  const router = useRouter();
+  const loginvalue = async(values) => {
+     try{
+           await axios.post('/api/login', values, {'Conent-Type':'application/json'});
+            router.push('/admin')     
+          }catch(err){
+            message.error( err.message);
+        }
   };
   return (
     <div className="flex bg-gray-100 h-screen justify-center items-center">
