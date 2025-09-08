@@ -116,4 +116,265 @@
          - `request` object represent karta hai incoming HTTP request.
          - `console.log("Welcome to Middleware")` sirf ek message print kar raha hai — yeh debugging ke liye helpful hai.
          - Abhi koi logic nahi likha gaya — lekin yahan tum JWT check kar sakte ho, user role verify kar sakte ho, ya unauthorized users ko redirect bhi kar sakte ho.
+
+33. hamesha authentication security kahan check honi chayai server pai check honi chayai to middlewear ka code jo hai wo bydefault server par check hota hai.
+    ksi bhi route ko protect kar rahai hai to wo server sai manipulate hokai ayega
+        ab yai code likha hai middlewear.js mai 
+              export const config = {
+                matcher: "/admin/:path*",
+              };
+              export const middleware = (request) => {
+                console.log("cookies");
+                const cookies = request.cookies.get("accessToken");
+                console.log(cookies);
+              };
+        Yeh code **Next.js middleware** ka hai, jo server-side pe request handle karne se pehle chalti hai. Chalo step-by-step Roman Urdu mein samjhaata hoon:
          
+         ---
+         
+         ### 🧠 **Basic Idea of This Code**
+         
+         #### 1. **`config` object**
+         ```js
+         export const config = {
+           matcher: "/admin/:path*",
+         };
+         ```
+         - Yeh batata hai ke middleware sirf un routes pe chalega jo `/admin` se start hote hain.
+         - `:path*` ka matlab hai ke `/admin` ke baad koi bhi sub-path ho, middleware apply hoga.
+           - Example: `/admin`, `/admin/dashboard`, `/admin/users/123` — sab pe chalega.
+         
+         #### 2. **`middleware` function**
+         ```js
+         export const middleware = (request) => {
+           console.log("cookies");
+           const cookies = request.cookies.getAll("accessToken");
+           console.log(cookies);
+         };
+         ```
+         - Jab koi request `/admin/...` route pe aati hai, yeh function activate hota hai.
+         - `request.cookies.getAll("accessToken")` ka matlab hai:
+           - Request ke andar se **`accessToken` cookie** ko read karna.
+           - Agar multiple cookies hain with same name (rare case), sab mil jaati hain.
+         - `console.log(cookies)` se terminal pe cookies print hoti hain — debugging ke liye.
+         
+         ---
+          export const middleware = (request) => {
+           console.log("cookies");
+           const cookies = request.cookies.get("accessToken");
+           console.log(cookies);
+         };
+
+         request.cookies.get("accessToken");
+         - Yeh line request ke andar se "accessToken" cookie ko retrieve kar rahi hai.
+         - Agar cookie exist karti hai, toh uski value milti hai.
+         - Agar nahi karti, toh undefined return hota hai.
+         
+34. retrive or read mai difference
+           (Retrieve)-->Data ko kisi source se nikalna ya access karna
+           "Cookies ko retrieve karo" — yani server se cookies le lo
+
+           (Read)--> Data ko parhna ya uski value ko samajhna
+           "Cookie ki value read karo" — yani usme kya likha hai wo dekho
+35. middlewear.js mai code  
+      if(!cookies){
+     return NextResponse.redirect(new URL('/login', request.url))
+  }
+  NextResponse.redirect(new URL('/login',)) --> NextResponse .redirect mai do argument daitai hai pehla argument mai define karai gai 
+  kis URL pai behjna hai ('/login') or comma kai bath dosra argument usmai define karai gai kis URL sai behjna hai to hum static nahi dai gai ('/signup') hum dynamic banai gai--> "request.url"<---
+  yai sab tab hoga ager cookies nahi hai -->(!cookies)<-- 
+     is code sai yai hoa kai ager accessToken cookies mai nahi hoa to login page khul jyega orr abhi esahi horaha hai
+36. ager accessToken hoa to yai cooies mai to verify karna hoga iskai lyai newfolder create kiya api mai "session" nam sai aik folder crate kiya 
+    usmai route.js banaya hum nai kuch yai code likha
+      import { NextResponse } from "next/server";
+      import jwt from 'jsonwebtoken'
+      
+      export const POST = async (request)=>{
+          try {
+              const {token} = await request.json();
+              const session = await jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+              return NextResponse.json(session);
+      
+          } catch (error) {
+              return resizeBy.json(
+                  {success: false},
+                  {status: 401}
+              )
+          }
+      }
+    Yeh code ek **Next.js API route** ka `POST` handler hai, jiska basic maqsad hai: **JWT token verify karna aur user session return karna**. Chalo Roman Urdu mein iska breakdown karte hain:
+    
+    ---
+    
+    ### 🧠 **Is Code Ka Pichay Ka Idea (Purpose)**
+    
+    Yeh code likhne ka maqsad hai:
+    
+    1. **Client se JWT token lena** (usually login ke baad frontend se bheja jata hai).
+    2. **Token ko verify karna** using `jsonwebtoken` library.
+    3. **Agar token valid ho**, toh uska decoded payload (user info, etc.) return karna.
+    4. **Agar token invalid ho ya expire ho gaya ho**, toh `401 Unauthorized` response dena.
+    
+    ---
+    
+    ### 🧩 **Code Breakdown – Roman Urdu mein**
+    
+    ```js
+    import { NextResponse } from "next/server";
+    import jwt from 'jsonwebtoken';
+    ```
+    - `NextResponse` use hota hai response banane ke liye.
+    - `jsonwebtoken` se JWT verify karte hain.
+    
+    ---
+    
+    ```js
+    export const POST = async (request) => {
+    ```
+    - Yeh `POST` request ka handler hai — jab client token bhejta hai.
+    
+    ---
+    
+    ```js
+    const { token } = await request.json();
+    ```
+    - Request body se `token` extract kiya gaya hai.
+    
+    ---
+    
+    ```js
+    const session = await jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    ```
+    - JWT token ko verify kiya gaya hai using secret key.
+    - Agar token valid hai, toh `session` mein decoded data milta hai (e.g. user ID, email).
+    
+    ---
+    
+    ```js
+    return NextResponse.json(session);
+    ```
+    - Valid token hone par session data JSON format mein return hota hai.
+    
+    ---
+    
+    ```js
+    } catch (error) {
+        return resizeBy.json(
+            { success: false },
+            { status: 401 }
+        );
+    }
+    ```
+    - Agar token invalid ho ya koi error aaye, toh `401 Unauthorized` response bheja jata hai.
+    - **Note**: `resizeBy.json` galat hai — yahan `NextResponse.json` hona chahiye. Yeh typo hai.
+    
+    ✅ **Fix:**
+    ```js
+    return NextResponse.json(
+        { success: false },
+        { status: 401 }
+    );
+    ```
+37. middleware mai ap axios waqera use nahi kar sakhtai apko fetch use karna hoga or fetch mai pure object nahi likh sakhtai
+    sringify karna hoga jesai mai esai likh raha tha -->{token: cookies}<-- likn fetch mai pure js use nahi kar sakhtai to
+    stringify nmai likhai gai esai -->JSON.stringify({token: cookies})<---
+
+38. import { NextResponse } from "next/server";
+export const config = {
+  matcher: "/admin/:path*",
+};
+export const middleware = async (request) => {
+  console.log("cookies");
+  const cookies = request.cookies.get("accessToken");
+  if(!cookies){
+     return NextResponse.redirect(new URL('/login', request.url))
+  }
+    // console.log(cookies); 
+    const api = await fetch(`${process.env.SERVER}/api/session`, {
+        method: 'post',
+        body: JSON.stringify({token: cookies}),
+        headers: {
+            'Content-type': 'application/json'
+        }
+    })
+    console.log(api);
+    
+};
+
+
+      #### ✅ `.env file mein:`
+```env
+SERVER = http://localhost:3000
+```
+- Yeh environment variable define karta hai ke backend server ka base URL kya hai.
+- Middleware mein `process.env.SERVER` se yeh value use ho rahi hai.
+
+---
+
+#### ✅ `middleware.js` mein:
+
+```js
+export const config = {
+  matcher: "/admin/:path*",
+};
+```
+- Yeh batata hai ke middleware sirf `/admin/...` routes pe chalega.
+
+---
+
+```js
+const cookies = request.cookies.get("accessToken");
+```
+- Request ke cookies se `"accessToken"` nikaala gaya.
+
+---
+
+```js
+if (!cookies) {
+  return NextResponse.redirect(new URL('/login', request.url));
+}
+```
+- Agar token nahi mila, toh user ko `/login` pe redirect kar diya jata hai.
+
+---
+
+```js
+const api = await fetch(`${process.env.SERVER}/api/session`, {
+  method: 'post',
+  body: JSON.stringify({ token: cookies }),
+  headers: {
+    'Content-type': 'application/json'
+  }
+});
+```
+- Token ko backend pe bheja gaya hai taake verify ho.
+- API call ho rahi hai `/api/session` pe — jo JWT verify karega.
+
+---
+
+```js
+console.log(api);
+```
+- Sirf response object print ho raha hai — lekin actual data (`api.json()`) abhi extract nahi ho raha.
+
+---
+
+### ⚠️ **Missing Parts / Suggestions**
+
+1. **Response ko parse karo:**
+   ```js
+   const session = await api.json();
+   console.log(session);
+   ```
+
+2. **Agar session invalid ho (e.g. error aaya), toh redirect ya error handle karo.**
+
+3. **Middleware mein response return karna zaroori hota hai:**
+   - Abhi tumne `NextResponse.next()` nahi likha — toh middleware khatam nahi ho raha properly.
+
+   ✅ Add this at the end:
+   ```js
+   return NextResponse.next();
+   ```
+
+---
