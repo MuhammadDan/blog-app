@@ -280,101 +280,160 @@
     stringify nmai likhai gai esai -->JSON.stringify({token: cookies})<---
 
 38. import { NextResponse } from "next/server";
-export const config = {
-  matcher: "/admin/:path*",
-};
-export const middleware = async (request) => {
-  console.log("cookies");
-  const cookies = request.cookies.get("accessToken");
-  if(!cookies){
-     return NextResponse.redirect(new URL('/login', request.url))
-  }
-    // console.log(cookies); 
-    const api = await fetch(`${process.env.SERVER}/api/session`, {
-        method: 'post',
-        body: JSON.stringify({token: cookies}),
-        headers: {
-            'Content-type': 'application/json'
+      export const config = {
+        matcher: "/admin/:path*",
+      };
+      export const middleware = async (request) => {
+        console.log("cookies");
+        const cookies = request.cookies.get("accessToken");
+        if(!cookies){
+           return NextResponse.redirect(new URL('/login', request.url))
         }
-    })
-    console.log(api);
-    
-};
+          // console.log(cookies); 
+          const api = await fetch(`${process.env.SERVER}/api/session`, {
+              method: 'post',
+              body: JSON.stringify({token: cookies}),
+              headers: {
+                  'Content-type': 'application/json'
+              }
+          })
+          console.log(api);
+          
+      };
+      
+      
+            #### ✅ `.env file mein:`
+      ```env
+      SERVER = http://localhost:3000
+      ```
+      - Yeh environment variable define karta hai ke backend server ka base URL kya hai.
+      - Middleware mein `process.env.SERVER` se yeh value use ho rahi hai.
+      
+      ---
+      
+      #### ✅ `middleware.js` mein:
+      
+      ```js
+      export const config = {
+        matcher: "/admin/:path*",
+      };
+      ```
+      - Yeh batata hai ke middleware sirf `/admin/...` routes pe chalega.
+      
+      ---
+      
+      ```js
+      const cookies = request.cookies.get("accessToken");
+      ```
+      - Request ke cookies se `"accessToken"` nikaala gaya.
+      
+      ---
+      
+      ```js
+      if (!cookies) {
+        return NextResponse.redirect(new URL('/login', request.url));
+      }
+      ```
+      - Agar token nahi mila, toh user ko `/login` pe redirect kar diya jata hai.
+      
+      ---
+      
+      ```js
+      const api = await fetch(`${process.env.SERVER}/api/session`, {
+        method: 'post',
+        body: JSON.stringify({ token: cookies }),
+        headers: {
+          'Content-type': 'application/json'
+        }
+      });
+      ```
+      - Token ko backend pe bheja gaya hai taake verify ho.
+      - API call ho rahi hai `/api/session` pe — jo JWT verify karega.
+      
+      ---
+      
+      ```js
+      console.log(api);
+      ```
+      - Sirf response object print ho raha hai — lekin actual data (`api.json()`) abhi extract nahi ho raha.
+      
+      ---
+      
+      ### ⚠️ **Missing Parts / Suggestions**
+      
+      1. **Response ko parse karo:**
+         ```js
+         const session = await api.json();
+         console.log(session);
+         ```
+      
+      2. **Agar session invalid ho (e.g. error aaya), toh redirect ya error handle karo.**
+      
+      3. **Middleware mein response return karna zaroori hota hai:**
+         - Abhi tumne `NextResponse.next()` nahi likha — toh middleware khatam nahi ho raha properly.
+      
+         ✅ Add this at the end:
+         ```js
+         return NextResponse.next();
+         ```
+      
+      ---
 
+39. code ki definition
+         if(!api.ok){
+      return NextResponse.redirect(new URL('/login', request.url))
+      
+    }
+    else{
+      return NextResponse.next();
+    }
+    ager "ok" ki value "false" hai to login pai redirect kardo yani login na ho user bcz session verify nahi hoa hai.
+    next() middlewear ka request forward karnai  karnai kai lyai use horaha hai agerr 'ok" ki value true hoi to agai ap rquest forward kardo yani user login karlai
 
-      #### ✅ `.env file mein:`
-```env
-SERVER = http://localhost:3000
-```
-- Yeh environment variable define karta hai ke backend server ka base URL kya hai.
-- Middleware mein `process.env.SERVER` se yeh value use ho rahi hai.
+40. abhi jab bhi mai admin pai jana ch raha ho to error arha hai islyai mai nai api ka code esai roka return ki help sai
+        api/session/route.js
+         const {token} = await request.json();
+        console.log(token);
+        return;
+    ab isay nichai jo bhi code hoga woh nahi chalai ga. phir middlewear mai  is code ko commit kiya takai pata chahiye
+       // if(!api.ok){
+    //   return NextResponse.redirect(new URL('/login', request.url))
+      
+    // } else{
+    //   return NextResponse.next();
+    // }
+  or bas yai likha 
+      return NextResponse.next();
+      jisai pata chala jab wo login sai admin pai gai to usnai token diya 
+      esa
+      cookies
+{
+  name: 'accessToken',
+  value: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmdWxsbmFtZSI6IklmcmEgS2hhbiIsImVtYWlsIjoiSWZyYWtoYW5AZ21haWwuY29tIiwiaWF0IjoxNzU3NTczODEwLCJleHAiOjE3NTc1NzQ3MTB9.k0JuAJzn8KX86KfRE_4-KWNFzBV10LL__kZiz9QLazc'        
+} 
+       to wo value property mai diya usnai to humai pata chala kai hum value to likha hi nahi esai 
+        // method: 'post',
+        // body: JSON.stringify({token: cookies}),
+        // headers: {
+         //   'Content-type': 'application/json'
+       // }
+       " token:cookies" tabhi wo login sai admin pai nahi ja paraha tha islyai "token = cookies.value" likhai gai tab wo read karai ga token ko or api/session/route.js sai return hatadiya takai agai ka code bhi chalai phir "login" sai "admin" pai chala jyega
+    is way sai ap security user kai lyai lagao gai.
 
----
+41. frontent mai apko user ka data pesh karna ho to kesai karrai gai to middlewear sai cookies deliver karna hoga 
+        middlewear.js
+        const SEVENDAYS = (7*24*60*60)
+        result.cookies.set("session", JSON.stringify(body), {maxAge: SEVENDAYS})
+      🧠 Line-by-line Explanation:
+            1. const SEVENDAYS = (7*24*60*60)
+            - Yeh line ek constant define karti hai jo 7 din ke seconds calculate karti hai.
+            - Calculation:
+            - 7 din × 24 ghante × 60 minutes × 60 seconds = 604800 seconds
+            - Yeh value cookie ke expiry time ke liye use hoti hai.
+            2. result.cookies.set("session", JSON.stringify(body), {maxAge: SEVENDAYS})
+            - Yeh line ek cookie set karti hai jiska naam "session" hai.
+            - JSON.stringify(body) ka matlab hai ke API se jo response mila hai (user session data), usay string format mein convert karke cookie mein store kiya ja raha hai.
+            - { maxAge: SEVENDAYS } ka matlab hai ke yeh cookie 7 din tak valid rahegi.
+      🎯 Overall Maqsad:
+            Jab user ka accessToken valid hota hai aur session API se successful response milta hai, to middleware ek "session" cookie set karta hai jo user ke session data ko 7 din tak store karta hai. Isse user ko baar baar login karne ki zarurat nahi padti.
 
-#### ✅ `middleware.js` mein:
-
-```js
-export const config = {
-  matcher: "/admin/:path*",
-};
-```
-- Yeh batata hai ke middleware sirf `/admin/...` routes pe chalega.
-
----
-
-```js
-const cookies = request.cookies.get("accessToken");
-```
-- Request ke cookies se `"accessToken"` nikaala gaya.
-
----
-
-```js
-if (!cookies) {
-  return NextResponse.redirect(new URL('/login', request.url));
-}
-```
-- Agar token nahi mila, toh user ko `/login` pe redirect kar diya jata hai.
-
----
-
-```js
-const api = await fetch(`${process.env.SERVER}/api/session`, {
-  method: 'post',
-  body: JSON.stringify({ token: cookies }),
-  headers: {
-    'Content-type': 'application/json'
-  }
-});
-```
-- Token ko backend pe bheja gaya hai taake verify ho.
-- API call ho rahi hai `/api/session` pe — jo JWT verify karega.
-
----
-
-```js
-console.log(api);
-```
-- Sirf response object print ho raha hai — lekin actual data (`api.json()`) abhi extract nahi ho raha.
-
----
-
-### ⚠️ **Missing Parts / Suggestions**
-
-1. **Response ko parse karo:**
-   ```js
-   const session = await api.json();
-   console.log(session);
-   ```
-
-2. **Agar session invalid ho (e.g. error aaya), toh redirect ya error handle karo.**
-
-3. **Middleware mein response return karna zaroori hota hai:**
-   - Abhi tumne `NextResponse.next()` nahi likha — toh middleware khatam nahi ho raha properly.
-
-   ✅ Add this at the end:
-   ```js
-   return NextResponse.next();
-   ```
-
----
