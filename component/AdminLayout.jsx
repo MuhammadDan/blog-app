@@ -9,7 +9,7 @@ import {
 } from '@ant-design/icons';
 import { Button, Layout, Menu, theme } from 'antd';
 const { Header, Sider, Content } = Layout;
-const AdminLayout = () => {
+const AdminLayout = ({children}) => {
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer, borderRadiusLG },
@@ -58,12 +58,12 @@ const AdminLayout = () => {
           style={{
             margin: '24px 16px',
             padding: 24,
-            minHeight: 280,
+            minHeight: '100vh',
             background: colorBgContainer,
             borderRadius: borderRadiusLG,
           }}
         >
-          Content
+          {children}
         </Content>
       </Layout>
     </Layout>

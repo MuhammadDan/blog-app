@@ -437,3 +437,7 @@
       🎯 Overall Maqsad:
             Jab user ka accessToken valid hota hai aur session API se successful response milta hai, to middleware ek "session" cookie set karta hai jo user ke session data ko 7 din tak store karta hai. Isse user ko baar baar login karne ki zarurat nahi padti.
 
+42. admin ka jo route /folder keh lo usmai layout.js nam ki file banai hai uskai component mai sirf ui use karai gai or yahan children receive karkai jo component hm nai banaya hoga na adminlayout kai nam sai wo receive karlai gai to separate admin ka roue esai 
+    handle hoga ab usai blacklist karlai ga.
+
+43. Antdesign mai ap button summit pai onclick nahi onfinsh detai hi.

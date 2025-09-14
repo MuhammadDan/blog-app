@@ -38,7 +38,8 @@ const Layout = ({children}) => {
 
     const blacklist = [
       '/login',
-      '/signup'
+      '/signup',
+      '/admin'
     ]
     
 const isBlacklist = blacklist.includes(pathname)

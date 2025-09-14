@@ -1,8 +1,10 @@
 import React from 'react'
 import AdminLayout from '@/component/AdminLayout'
-const Layout = () => {
+const Layout = ({children}) => {
   return (
-    <AdminLayout />
+    <AdminLayout>
+      {children}
+    </AdminLayout>
   )
 }
 
