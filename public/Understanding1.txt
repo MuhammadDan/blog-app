@@ -441,3 +441,132 @@
     handle hoga ab usai blacklist karlai ga.
 
 43. Antdesign mai ap button summit pai onclick nahi onfinsh detai hi.abhi tak mai blog ager likho to console pai dekh raha hai. 
+
+44. mujhai blog ko save karna hai iskai lyai "api" banai hai to "api" kai lyai schema bana parega database mai tabhi blog.schema.js file create hoi schema folder mai.
+    import mongoose, {Schema} from 'mongoose';
+
+     const blogSchema = new Schema({
+     
+     })
+     
+     mongoose.models = {}
+     
+     const BlogSchema = mongoose.models("Blog", blogSchema)
+     export default BlogSchema
+      
+     empty object ko pass karnai ka maqsad yai hai kai aik bar schema use honai kai baad wo catch kar leta hai or wo dobara insert karnai nahi dega yai ES6 ka problem hai kai jab bhi ab Nextjs mai schema design 
+     karogai mongoose ka to yai empty object (mongoose.models = {}) create karna zaroori hai ager ap typescript use nahi kar rahai ho to yai kaam krna hoga ager yai nahi lgo gai to aik bar ap ko data use karnai dga iskai bath phir nahi krnai dega
+     import mongoose, {Schema} from 'mongoose';
+     
+     const blogSchema = new Schema({
+         title: {
+             type: String,
+             required: true,
+             trim: true,
+             unique: true,
+             index: true
+         },
+         description: {
+             type: String,
+             required: true,
+             trim: true,
+         },
+     })
+     
+     mongoose.models = {}
+     
+     const BlogSchema = mongoose.models("Blog", blogSchema)
+     export default BlogSchema
+              or yai schema ban gaya hamra.
+
+45. Schema ban gaya hai ab rout banatai hai api folder mai blog boldr creae kiya.
+        import { NextResponse } from "next/server";
+        export const POST = async (request) =>{
+            try {
+                const body = await request.json()
+            } catch (error) {
+                return res.json(
+                    {success: false, message: err.message},
+                    {status: 500}
+                )
+            }
+        }
+        schema sai jo title or body ayega wo is line mai receive hojyega (const body = await request.json()) 
+
+     yai store karnai ka code hogaya jab bhi post request hogi to yai code execute hoga
+            export const POST = async (request) =>{
+         try {
+             const body = await request.json()
+             const blog = new BlogSchema(body)
+             await blog.save()
+             return NextResponse.json(blog)
+         } catch (error) {
+             return res.json(
+                 {success: false, message: err.message},
+                 {status: 500}
+             )
+         }
+     }
+46. abhi mai nai component/admin.jsx file mai npm i sw insall kiya yai swr kiya ho hai or fetcher ka concep kiya hai?
+     
+     chalo step-by-step Roman Urdu mai samjhtay hain:
+         ---
+         
+         ### 🧠 1) `swr` kya hota hai?
+         
+         `SWR` ek React Hook library hai jo data fetch karne ke liye use hoti hai. Iska full form hai **Stale-While-Revalidate**. Yeh technique pehle purana (cached) data dikhati hai, phir background mai naya data fetch karti hai aur UI ko update karti hai.
+         
+         **Matlab:**  
+         Jab tum `useSWR('/api/blog', fetcher)` likhtay ho, to pehle agar cache mai data hai to wo turant mil jata hai. Phir background mai naya data fetch hota hai aur agar update ho to component dobara render hota hai.
+         
+         **Faida kya hai?**
+         - Fast UI response
+         - Automatic re-fetch jab user page pe wapas aaye
+         - Error handling aur loading state built-in hoti hai
+         
+         ---
+         
+         ### 🔧 2) `fetcher` function ka concept kya hai?
+         
+         `fetcher` ek async function hota hai jo data fetch karta hai kisi URL se. SWR ko tumhara fetcher chahiye hota hai taake wo pata kar sake data kaise lana hai.
+         
+         ```js
+         const fetcher = async (url) => {
+           try {
+             const { data } = await axios.get(url); // axios se GET request
+             return data; // agar sab theek ho to data return karo
+           } catch (err) {
+             throw new Error(err); // agar error aaye to throw karo
+           }
+         };
+         ```
+         
+         Yeh function basically ek wrapper hai jo axios se data fetch karta hai aur SWR ko deta hai.
+         
+         ---
+         
+         ### 🔁 3) `useSWR('/api/blog', fetcher)` kya karta hai?
+         
+         ```js
+         const { data } = useSWR('/api/blog', fetcher);
+         console.log("Data from SWR:", data);
+         ```
+         
+         Yeh line:
+         - `/api/blog` se data fetch karti hai using `fetcher`
+         - Agar data mil gaya to `data` variable mai store hota hai
+         - Agar error ho to SWR usko handle karta hai
+         - Tum `console.log` se dekh sakte ho ke kya data aya
+         
+         ---
+         
+         ### 🧪 Real-life example:
+         
+         Socho tumhara backend `/api/blog` pe blog posts bhej raha hai. Tum frontend mai SWR use kar rahe ho taake:
+         - Pehle se aya hua data turant dikh jaye
+         - Naya data background mai refresh ho jaye
+         - Agar internet wapas aaye to data dobara fetch ho jaye
+         
+         ---
+         
+abhi tak mai nai jitna code likha hai wo console mai dekh raha hai pichal bhi jo mai nai likha tha wo sab dekh rahha hai console mai or ui mai dekh raha hai.
