@@ -170,13 +170,13 @@
          - Agar cookie exist karti hai, toh uski value milti hai.
          - Agar nahi karti, toh undefined return hota hai.
          
-34. retrive or read mai difference
+34. 🟢 retrive or read mai difference
            (Retrieve)-->Data ko kisi source se nikalna ya access karna
            "Cookies ko retrieve karo" — yani server se cookies le lo
 
            (Read)--> Data ko parhna ya uski value ko samajhna
            "Cookie ki value read karo" — yani usme kya likha hai wo dekho
-35. middlewear.js mai code  
+35.🟢  middlewear.js mai code  
       if(!cookies){
      return NextResponse.redirect(new URL('/login', request.url))
   }
@@ -184,7 +184,7 @@
   kis URL pai behjna hai ('/login') or comma kai bath dosra argument usmai define karai gai kis URL sai behjna hai to hum static nahi dai gai ('/signup') hum dynamic banai gai--> "request.url"<---
   yai sab tab hoga ager cookies nahi hai -->(!cookies)<-- 
      is code sai yai hoa kai ager accessToken cookies mai nahi hoa to login page khul jyega orr abhi esahi horaha hai
-36. ager accessToken hoa to yai cooies mai to verify karna hoga iskai lyai newfolder create kiya api mai "session" nam sai aik folder crate kiya 
+36. 🟢 ager accessToken hoa to yai cooies mai to verify karna hoga iskai lyai newfolder create kiya api mai "session" nam sai aik folder crate kiya 
     usmai route.js banaya hum nai kuch yai code likha
       import { NextResponse } from "next/server";
       import jwt from 'jsonwebtoken'
@@ -275,11 +275,11 @@
         { status: 401 }
     );
     ```
-37. middleware mai ap axios waqera use nahi kar sakhtai apko fetch use karna hoga or fetch mai pure object nahi likh sakhtai
+37. 🟢 middleware mai ap axios waqera use nahi kar sakhtai apko fetch use karna hoga or fetch mai pure object nahi likh sakhtai
     sringify karna hoga jesai mai esai likh raha tha -->{token: cookies}<-- likn fetch mai pure js use nahi kar sakhtai to
     stringify nmai likhai gai esai -->JSON.stringify({token: cookies})<---
 
-38. import { NextResponse } from "next/server";
+38. 🟢 import { NextResponse } from "next/server";
       export const config = {
         matcher: "/admin/:path*",
       };
@@ -379,7 +379,7 @@
       
       ---
 
-39. code ki definition
+39. 🟢 code ki definition
          if(!api.ok){
       return NextResponse.redirect(new URL('/login', request.url))
       
@@ -390,7 +390,7 @@
     ager "ok" ki value "false" hai to login pai redirect kardo yani login na ho user bcz session verify nahi hoa hai.
     next() middlewear ka request forward karnai  karnai kai lyai use horaha hai agerr 'ok" ki value true hoi to agai ap rquest forward kardo yani user login karlai
 
-40. abhi jab bhi mai admin pai jana ch raha ho to error arha hai islyai mai nai api ka code esai roka return ki help sai
+40. 🟢 abhi jab bhi mai admin pai jana ch raha ho to error arha hai islyai mai nai api ka code esai roka return ki help sai
         api/session/route.js
          const {token} = await request.json();
         console.log(token);
@@ -420,7 +420,7 @@
        " token:cookies" tabhi wo login sai admin pai nahi ja paraha tha islyai "token = cookies.value" likhai gai tab wo read karai ga token ko or api/session/route.js sai return hatadiya takai agai ka code bhi chalai phir "login" sai "admin" pai chala jyega
     is way sai ap security user kai lyai lagao gai.
 
-41. frontent mai apko user ka data pesh karna ho to kesai karrai gai to middlewear sai cookies deliver karna hoga 
+41. 🟢 frontent mai apko user ka data pesh karna ho to kesai karrai gai to middlewear sai cookies deliver karna hoga 
         middlewear.js
         const SEVENDAYS = (7*24*60*60)
         result.cookies.set("session", JSON.stringify(body), {maxAge: SEVENDAYS})
@@ -437,12 +437,12 @@
       🎯 Overall Maqsad:
             Jab user ka accessToken valid hota hai aur session API se successful response milta hai, to middleware ek "session" cookie set karta hai jo user ke session data ko 7 din tak store karta hai. Isse user ko baar baar login karne ki zarurat nahi padti.
 
-42. admin ka jo route /folder keh lo usmai layout.js nam ki file banai hai uskai component mai sirf ui use karai gai or yahan children receive karkai jo component hm nai banaya hoga na adminlayout kai nam sai wo receive karlai gai to separate admin ka roue esai 
+42. 🟢 admin ka jo route /folder keh lo usmai layout.js nam ki file banai hai uskai component mai sirf ui use karai gai or yahan children receive karkai jo component hm nai banaya hoga na adminlayout kai nam sai wo receive karlai gai to separate admin ka roue esai 
     handle hoga ab usai blacklist karlai ga.
 
-43. Antdesign mai ap button summit pai onclick nahi onfinsh detai hi.abhi tak mai blog ager likho to console pai dekh raha hai. 
+43. 🟢 Antdesign mai ap button summit pai onclick nahi onfinsh detai hi.abhi tak mai blog ager likho to console pai dekh raha hai. 
 
-44. mujhai blog ko save karna hai iskai lyai "api" banai hai to "api" kai lyai schema bana parega database mai tabhi blog.schema.js file create hoi schema folder mai.
+44. 🟢 mujhai blog ko save karna hai iskai lyai "api" banai hai to "api" kai lyai schema bana parega database mai tabhi blog.schema.js file create hoi schema folder mai.
     import mongoose, {Schema} from 'mongoose';
 
      const blogSchema = new Schema({
@@ -479,7 +479,7 @@
      export default BlogSchema
               or yai schema ban gaya hamra.
 
-45. Schema ban gaya hai ab rout banatai hai api folder mai blog boldr creae kiya.
+45. 🟢 Schema ban gaya hai ab rout banatai hai api folder mai blog boldr creae kiya.
         import { NextResponse } from "next/server";
         export const POST = async (request) =>{
             try {
@@ -507,7 +507,7 @@
              )
          }
      }
-46. abhi mai nai component/admin.jsx file mai npm i sw insall kiya yai swr kiya ho hai or fetcher ka concep kiya hai?
+46. 🟢 abhi mai nai component/admin.jsx file mai npm i sw insall kiya yai swr kiya ho hai or fetcher ka concep kiya hai?
      
      chalo step-by-step Roman Urdu mai samjhtay hain:
          ---
@@ -570,3 +570,41 @@
          ---
          
 abhi tak mai nai jitna code likha hai wo console mai dekh raha hai pichal bhi jo mai nai likha tha wo sab dekh rahha hai console mai or ui mai dekh raha hai.
+
+47.   🟢 GET Method – Data lena (read karna)
+             Client server se data maangta hai.
+      
+      🟡 POST Method – Naya data bhejna (create karna)
+            Client server ko naya data deta hai, jaise form submit karna.
+
+      🟠 PUT Method – Purana data update karna (replace karna)
+             Client server ko batata hai ke kisi specific cheez ko update karo.
+
+48. 🟠 Yeh PUT kya kar raha hai?
+         Ye ek API route handler hai jo sirf PUT request ko handle karta hai. Jab koi client (browser ya frontend app) is endpoint pe PUT request bhejta hai, to server yeh function run karta hai.
+         📌 Kaam kya ho raha hai?
+         - Server ek JSON response bhej raha hai: { success: true }
+         - Iska matlab hai: “PUT request successful thi.”
+         import { NextResponse } from "next/server";
+         
+         export const PUT = () => {
+           return NextResponse.json({ success: true });
+         }
+
+49. 🟠 Jo apki API ka main route.js hoga usmai POST or GET ka code hoga or is slug[id] id mai teen tarekai ka code hoga 
+       update, delete or get karnai ka code hoga
+
+       import {NextResponse} from "next/server";
+
+          export const PUT = ()=>{
+              return NextResponse.json({success: true})
+          }
+          
+          export const DELETE = ()=>{
+              return NextResponse.json({success: true})
+          }
+          
+          export const GET = ()=>{
+              return NextResponse.json({success: true})
+          }
+          Yai code likhnai sai "postman" mai PUT ya GET mehod lagaa ho is url pai (http://localhost:3000/api/blog/133) to SUCCESS: TRUE arha hai

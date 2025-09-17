@@ -3,6 +3,7 @@ import { Button, Card, Form, Input, message } from 'antd'
 import React from 'react'
 import axios from 'axios'
 import useSWR from 'swr'
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 
 const fetcher = async (url) =>{
     try {
@@ -51,9 +52,13 @@ const AdminComponent = () => {
     <div className='col-span-5 space-y-6'>
        {
         data && data.map((item, index)=>(
-          <Card key={index}>
+          <Card key={index} hoverable
+          actions={[
+            <EditOutlined  key="edit" />,
+            <DeleteOutlined  key="delete" />
+          ]}>
             <h1 className='text-2xl capitalize font-bold'>{item.title}</h1>
-            <p className='text-gray-500 text-lg'>{item.description}</p>
+            <p className='text-gray-500 text-lg'>{item.description.slice(0,100)}</p>
           </Card>
         ))
        }

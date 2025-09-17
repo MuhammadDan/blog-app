@@ -53,7 +53,7 @@ if(isBlacklist)
   return (
     <>
      <nav className="px-[7%] bg-white shadow-lg sticky top-0 left-0 w-full py-6 flex justify-between items-center">
-          <Link href="/" className="text-left text-2xl font-bold">AlgoAlchemy</Link>
+          <Link href="/" className="text-left text-2xl font-bold">YourBlog</Link>
           <div className="flex gap-5 justify-center flex-1 items-center">
           {
             menus.map((item,index)=>(
