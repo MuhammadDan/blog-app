@@ -668,5 +668,114 @@ abhi tak mai nai jitna code likha hai wo console mai dekh raha hai pichal bhi jo
           
           - Agar koi error aaye (jaise database issue), to 500 status ke saath error message return hota hai.
 
-51.     yad rakhna blog kai ander two GET hai aik (blog/route.js) mai or dosra (blog/[id]/route.js) mai  jo pehla wala GET hai wo sarai blog ko GET karega or jo
+51. 🟠    yad rakhna blog kai ander two GET hai aik (blog/route.js) mai or dosra (blog/[id]/route.js) mai  jo pehla wala GET hai wo sarai blog ko GET karega or jo
         dosra walai file mai GET hai wo sirf us blog ko get karega jis ki id di jyegi      
+
+52. 🟠  fecher function kai anderr yai url ('/api/blog') by default pass hojyega async (url) mai
+         ab reurn data karo gai to apko iswalai data mai miljyga (const {data} = useSWR('/api/blog', fetcher))
+
+53. 🟠 yai blog delete karna ka code hai backend sai (admin.jsx)
+         const deleteBlog = async (id)=>{
+    try {
+      await axios.delete(`/api/blog/${id}`)
+      mutate('/api/blog')
+    } catch (err) {
+      message.error(err.message)
+    }
+  }
+  iski mai nai explanation likhi hai.
+        Ye function `deleteBlog` ek asynchronous function hai jo kisi blog ko delete karne ke liye likha gaya hai. Chalo step-by-step Roman Urdu mein samjhaata hoon:
+      
+      ---
+      
+      ### 🔍 Function Breakdown:
+      
+      ```js
+      const deleteBlog = async (id) => {
+      ```
+      - Ye ek arrow function hai jo `id` leta hai (matlab blog ka unique identifier).
+      - `async` ka matlab hai ke is function ke andar asynchronous operations honge (jaise API call).
+      
+      ---
+      
+      ```js
+      try {
+        await axios.delete(`/api/blog/${id}`)
+      ```
+      - `try` block mein hum delete request bhej rahe hain backend ko.
+      - `axios.delete()` ek HTTP DELETE request bhejta hai `/api/blog/${id}` pe.
+        - Agar `id = 5` ho, toh URL banega `/api/blog/5`
+      - `await` ka matlab hai ke JavaScript wait karegi jab tak delete request complete na ho.
+      
+      ---
+      
+      ```js
+      mutate('/api/blog')
+      ```
+      - Ye line `mutate` function ko call karti hai (usually SWR ya React Query mein hota hai).
+      - Iska kaam hai ke `/api/blog` ka data re-fetch ho jaye taake UI updated ho jaye (deleted blog list se hat jaye).
+      
+      ---
+      
+      ```js
+      } catch (err) {
+        message.error(err.message)
+      }
+      ```
+      - Agar delete request fail ho jaye (jaise server error ya network issue), toh `catch` block trigger hota hai.
+      - `message.error()` user ko error message show karta hai (ye usually Ant Design ka notification hota hai).
+      
+      ---
+
+54. mujhai blog ko update karna tha to mai nai yai line apnai code mai add ki tum mujhai yai samjhado 
+     const [form] = Form.useForm() 
+     const updateBlog = (item) =>{ 
+       form.setFieldsValue(item) 
+       } 
+       form={form} 
+       onClick={()=>updateBlog(item)}
+
+        Ye code Ant Design ke form system ke sath kaam karta hai, aur blog update karne ke liye form ko pre-fill karne ka tareeqa hai. Chalo Roman Urdu mein step-by-step samjhaata hoon:
+        
+        ---
+        
+        ### 🧠 Line-by-Line Explanation:
+        
+        #### 1. `const [form] = Form.useForm()`
+        - Ye Ant Design ka hook hai jo ek **form instance** return karta hai.
+        - Is instance se tum form ke fields ko control kar sakte ho — set karna, reset karna, validate karna, etc.
+        
+        ---
+        
+        #### 2. `const updateBlog = (item) => { form.setFieldsValue(item) }`
+        - Ye function `updateBlog` kisi blog item ko form mein set karta hai.
+        - `form.setFieldsValue(item)` ka matlab hai:
+          - Jo `item` object tum pass karte ho (jisme title, content, etc. ho sakta hai), wo form ke fields mein auto-fill ho jata hai.
+          - Example: agar `item = { title: "Hello", content: "World" }` ho, toh form ke `title` aur `content` fields mein ye values aa jati hain.
+        
+        ---
+        
+        #### 3. `form={form}`
+        - Ye tum form component ko `form` instance pass kar rahe ho.
+        - Example:
+          ```jsx
+          <Form form={form}>
+            <Form.Item name="title" />
+            <Form.Item name="content" />
+          </Form>
+          ```
+        - Isse form Ant Design ke control mein aa jata hai, aur `form.setFieldsValue()` kaam karta hai.
+        
+        ---
+        
+        #### 4. `onClick={() => updateBlog(item)}`
+        - Jab tum kisi button ya edit icon pe click karte ho, ye function call hota hai.
+        - `item` wo blog data hai jo tum edit karna chahte ho.
+        - Ye `item` form ke andar set ho jata hai, taake user usko update kar sake.
+        
+        ---
+
+
+
+
+        
