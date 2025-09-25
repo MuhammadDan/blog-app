@@ -727,7 +727,7 @@ abhi tak mai nai jitna code likha hai wo console mai dekh raha hai pichal bhi jo
       
       ---
 
-54. mujhai blog ko update karna tha to mai nai yai line apnai code mai add ki tum mujhai yai samjhado 
+54. 🟠 mujhai blog ko update karna tha to mai nai yai line apnai code mai add ki tum mujhai yai samjhado 
      const [form] = Form.useForm() 
      const updateBlog = (item) =>{ 
        form.setFieldsValue(item) 
@@ -775,7 +775,10 @@ abhi tak mai nai jitna code likha hai wo console mai dekh raha hai pichal bhi jo
         
         ---
 
+55. 🟠 ap apko yai samjhna hai kai public page mai data kesai fetching hogi means ap login na bhi karai phir bhi blogs dekhtai hai na woh kaam karna hai.
+       apko "home page" pai blog dekhana hai  yahan pai ap SSR (Server side Rendering) kar rahai hai public page pai jab bhi data fetch karai gai public page kiya? woh page jo bina login kai kholai
+       uskai lyai apko SSR karna hoga to apko code "routing" wali file mai karna hoga routing wali file yani app kai ander app mai jo page.js hai usmai 
+       yahan pai ap "axios" use nahi kar sakhtai fetching kai lyai ap "fetch" function use karogai.
 
-
-
-        
+56. 🟠 useClient ager ksi code mai use karogai to sab code ko wo server pai nahi chalaiga jo code ko need hogi server ki sirf usko chalaiga. jo code browser pai chalna hoga wo browser par or jo code server par
+        wo server pai chalega 

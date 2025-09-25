@@ -89,7 +89,8 @@ const AdminComponent = () => {
     <div className='col-span-5 space-y-6'>
        {
         data && data.map((item, index)=>(
-          <Card key={index} hoverable
+          <div key={index}>
+          <Card hoverable
           actions={[
             <EditOutlined  key="edit" onClick={()=>updateBlog(item)}/>,
             <DeleteOutlined  key="delete" onClick={()=>deleteBlog(item._id)}/> // (item._id yai mongodb ka id ead kar raha hai)
@@ -97,6 +98,7 @@ const AdminComponent = () => {
             <h1 className='text-2xl capitalize font-bold'>{item.title}</h1>
             <p className='text-gray-500 text-lg'>{item.description.slice(0,100)}</p>
           </Card>
+          </div>
         ))
        }
     </div>
