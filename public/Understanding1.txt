@@ -117,7 +117,7 @@
          - `console.log("Welcome to Middleware")` sirf ek message print kar raha hai — yeh debugging ke liye helpful hai.
          - Abhi koi logic nahi likha gaya — lekin yahan tum JWT check kar sakte ho, user role verify kar sakte ho, ya unauthorized users ko redirect bhi kar sakte ho.
 
-33. hamesha authentication security kahan check honi chayai server pai check honi chayai to middlewear ka code jo hai wo bydefault server par check hota hai.
+33. 🟢 hamesha authentication security kahan check honi chayai server pai check honi chayai to middlewear ka code jo hai wo bydefault server par check hota hai.
     ksi bhi route ko protect kar rahai hai to wo server sai manipulate hokai ayega
         ab yai code likha hai middlewear.js mai 
               export const config = {
@@ -782,3 +782,21 @@ abhi tak mai nai jitna code likha hai wo console mai dekh raha hai pichal bhi jo
 
 56. 🟠 useClient ager ksi code mai use karogai to sab code ko wo server pai nahi chalaiga jo code ko need hogi server ki sirf usko chalaiga. jo code browser pai chalna hoga wo browser par or jo code server par
         wo server pai chalega 
+
+57. 🟠 const blogdata = await fetch(`${process.env.SERVER}/api/blog`)
+        const bdata = await blogdata.json(); // ismai wo data hi jo apka server data daiga
+        console.log("routing mai data",bdata);
+
+        yai code bar bar data fetch nahi karta aik ba karliya phir nahi karta 
+
+58. 🟠 catch ko ap forcelly delete nahi kar sakhtai apko programtically delete karni hai to programtically catch delete
+     karnai kai do tarekai hai
+       1. on demand cache revalidaion -(Jab ap chaho gi ushi waqt delete hoga)
+       2. isr- incemental site regeneration (is funcion mai ap timing set kadogai kai 10 sec mai cachy delete hojyega)
+
+59. 🟠 export const revalidate = 60; // yai 60 sec kai bad data ko revalidate kar dai ga or http pai request karega
+         lin ager har 1 min baad http request jati rahegi to hang honai ka dar hai islyai zyda sai zyda 1 din ka rakhna chayai.
+
+         export const revalidate = 86400; iska matlab hai ab jo bhi content change karogai server pai wo aik din baad browser pai dekhai ga or yai Zaroori hai SEO ko strong karnai kai lyai.
+
+60. 🟠   likn ager kabhi at the time data delete update karna hoa to kesai karai gai uskai lyai aik api banai
