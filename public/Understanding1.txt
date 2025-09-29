@@ -799,4 +799,19 @@ abhi tak mai nai jitna code likha hai wo console mai dekh raha hai pichal bhi jo
 
          export const revalidate = 86400; iska matlab hai ab jo bhi content change karogai server pai wo aik din baad browser pai dekhai ga or yai Zaroori hai SEO ko strong karnai kai lyai.
 
-60. 🟠   likn ager kabhi at the time data delete update karna hoa to kesai karai gai uskai lyai aik api banai
+60. 🟠   likn ager kabhi at the time data delete update karna hoa to kesai karai gai uskai lyai aik api banai mai ni iski vedio bani woh dekhlo.
+
+61. 🟠 
+       export const POST = async (req)=>{
+         // revalidatePath('/article'); // jis path ko revalidate karna hai wo yaha dai ga
+         const body = await req.json();
+         console.log(body);
+         const data = body.paths.map((item)=>({
+             path: item,
+             deletedAt: Date.now()
+         }
+         ))
+         return NextResponse.json(data)
+     }
+       
+       // abhi mai nai jitna bhi code kiya usai jina bhi path behjai gai wo sab array of object mai ban jyega.

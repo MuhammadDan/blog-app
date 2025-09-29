@@ -8,7 +8,9 @@ export const revalidate = 86400; // yai 60 sec kai bad data ko revalidate kar da
 
 const articleRoute = async() => {
   //  const blogdata = await fetch('http://localhost:3000/api/blog')
-  const blogdata = await fetch(`${process.env.SERVER}/api/blog`,  {cache:'no-cache'})
+  const blogdata = await fetch(`${process.env.SERVER}/api/blog`, {
+  next: { revalidate: 86400 }  // ISR ke liye cache
+});
     const bdata = await blogdata.json(); // ismai wo data hi jo apka server data daiga
     console.log("routing mai data",bdata);
     return (
