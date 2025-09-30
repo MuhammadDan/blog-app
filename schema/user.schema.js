@@ -18,7 +18,7 @@ const userSchema = new Schema({
         required: true,
         trim: true
     }
-})
+}, {timestamps: true})
 
 userSchema.pre("save",async function(next){
       const encrypted = await bcrypt.hash(this.password.toString(),12)

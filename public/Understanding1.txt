@@ -815,3 +815,33 @@ abhi tak mai nai jitna code likha hai wo console mai dekh raha hai pichal bhi jo
      }
        
        // abhi mai nai jitna bhi code kiya usai jina bhi path behjai gai wo sab array of object mai ban jyega.
+
+62. 🟠   Jesa hi mai update karo woh website mai live hojye. 
+         to yai line add kardo (component/Admin.jsx) 
+           await axios.post('/api/cache/clear', {paths: ['/article']})
+
+63. 🟠  Mujhai sorting karni hai jo blog mai likho wo uper dekhai iskai lyai "schema" ki dono file mai "timestamp: true" likho.
+            or phir (api/blogs/route.js) wali file mai sort ka function add karo esai
+               const blogs = await Blog.find().sort({createdAt: -1}) 
+
+64. 🟠 Mai chata ho jis title mai click karo wo title mujhai url mai dekhai. iskai do hi rule hai
+        1. Uska url catching hona chayai us data ka link create kardena hai jo ap search mai chatai ho
+        2. jo data search mai ana chayai wo title mai dekhai or us page pai return ho.
+           mainai component/article.jsx mai yai code likha
+             {
+            bldata.map((item, index)=>(
+              <div key={index}>
+              <Link key={index} href={`/article/${item.title.split(" ").join("-")}`}>
+              <Card hoverable>
+                <h1 className='capitalize text-2xl font-semibold'>{item.title}</h1>
+              </Card>
+              </Link>
+              </div>
+            ))
+          }
+          ab mai jis title mai click kata ho uska url kuch esa hota hai "(http://localhost:3000/article/Technology-Sector-Growth)" is tarha ka url jo bana hai
+          woh href wali line ki badolat hoa hai.
+          is tarha ap dynamic url create kar rahai ho jab bhi ap dynamic url create kartai hai to iska matlab hai ap nai "slug" create kiya hai
+
+65.  🟠 What is slug?
+          Aik esa url jo content pai click karnai kai baad content ka apna url hota hai

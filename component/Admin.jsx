@@ -26,6 +26,7 @@ const AdminComponent = () => {
          console.log("Submitting values:", values); // Add this to debug
         const {data} = await axios.post('/api/blog', values, {headers: {'Content-Type': 'application/json'}});  
         console.log("Response: ", data); 
+       // await axios.post('/api/cache/clear', {paths: ['/article']})
         mutate('/api/blog')    
         message.success('Blog created successfully!');
         form.resetFields() 

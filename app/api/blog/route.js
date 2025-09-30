@@ -24,7 +24,7 @@ export const GET = async (request) =>{
     try {
         await dbConnect();
 
-        const blogs = await Blog.find()
+        const blogs = await Blog.find().sort({createdAt: -1})
         return NextResponse.json(blogs)
     } catch (err) {
         console.error("Error in GET /api/blog:", err);
