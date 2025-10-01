@@ -845,3 +845,79 @@ abhi tak mai nai jitna code likha hai wo console mai dekh raha hai pichal bhi jo
 
 65.  🟠 What is slug?
           Aik esa url jo content pai click karnai kai baad content ka apna url hota hai
+
+66.  🟠 ap mai title pai click karo to abhi 404 error arha hai. mujhai yahan uska connt dikhana hai. to mai nai article folder mai [slug] folder creae kiya. bcz dynamic url hoga
+          phir 
+          const SlugRoute = () => {
+              return (
+                <div>
+                    <h1>Testing</h1>
+                </div>
+              )
+            }
+            
+            export default SlugRoute
+       
+      => itna code likha to jesai title pai click kara to wahan testing anai laga 
+            
+            const SlugRoute = ({params}) => {
+                console.log(params)
+              return (
+                <div>
+                    <h1>Testing</h1>
+                </div>
+              )
+            }
+            
+            export default SlugRoute
+            
+     => ap params ko destructing kara to to terminal mai slug ki sah wo title arha tha jis pai mai nai click kiya tha kuch istarha (slug: 'Technology-Sector-Growth',)
+      to component mai slug.jsx file create kiya or uper article/[slug]/page.js mai yai code likha 
+        
+        const SlugRoute = ({params}) => {
+    
+             return (
+               <div>
+                  <Slug title={params.slug}/>
+               </div>
+             )
+           }
+           
+           export default SlugRoute
+      
+     => isai slug.jsx mai props behja or slug.jsx mai is prop ko accept kiya or frontent mai show kara diya
+
+         const Slug = ({title}) => {
+             console.log(title);
+             return (
+             <div>
+                 <h1>{title.split("-").join(" ")}</h1>
+             </div>
+           )
+         }
+         
+         export default Slug
+
+67. 🟠 ab mai chata ho  kai metadata pai bhi jo title select kar woh hi dekhai to yai code likha 
+         artilce/[slug]/page.js
+
+            import Slug from "@/component/Slug"
+            
+            export const generateMetadata = ({params})=>{
+                return {
+                    title: params.slug.split("-").join(" ")
+                }
+            
+            }
+            
+            const SlugRoute = ({params}) => {
+                
+              return (
+                <div>
+                   <Slug title={params.slug}/>
+                </div>
+              )
+            }
+            
+            export default SlugRoute      
+         
