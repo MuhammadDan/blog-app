@@ -2,7 +2,7 @@ import Slug from "@/component/Slug"
 
 export const generateMetadata = ({params})=>{
     return {
-        title: params.slug.split("-").join(" ")
+        title: 'YourBlog - '+params.slug.split("-").join(" ")
     }
 
 }

@@ -1,5 +1,11 @@
+import '@/lib/db';
 import Blog from "@/schema/blog.schema";
+import mongoose from 'mongoose';
 import { NextResponse } from "next/server";
+
+const isId = (id)=>{
+   return mongoose.Types.ObjectId.isValid(id); // ye check karne kai liye kai id valid hai ya nahi
+}
 
 export const PUT = async (request, { params }) => {
   try {
@@ -38,6 +44,8 @@ export const DELETE = async (request, { params }) => {
 
 export const GET = async (request, { params }) => {
   try {
+    const id = isId(params.id); // ye check karne kai liye kai id valid hai ya nahi
+    console.log(id);
     const blogd = await Blog.findById(params.id);
     if (!blogd) {
       return NextResponse.json(

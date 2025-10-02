@@ -11,7 +11,7 @@ const Article = ({bldata}) => {
           {
             bldata.map((item, index)=>(
               <div key={index}>
-              <Link key={index} href={`/article/${item.title.split(" ").join("-")}`}>
+              <Link key={index} href={`/article/${encodeURIComponent(item.title.split(" ").join("-"))}`}>
               <Card hoverable>
                 <h1 className='capitalize text-2xl font-semibold'>{item.title}</h1>
               </Card>

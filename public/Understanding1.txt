@@ -919,5 +919,41 @@ abhi tak mai nai jitna code likha hai wo console mai dekh raha hai pichal bhi jo
               )
             }
             
-            export default SlugRoute      
+            export default SlugRoute    
+
+68.  🟠 aj mai nai aik problem face ki jesai mea title esa hai "TIOBE Notes Slight Drops for C++ and JavaScript and c#" likn 
+         browser mai esa arha tha   "TIOBE Notes Slight Drops for C%2B%2B and JavaScript and c" yani sign waqera ko wo percentage mai convert kar dai raha tha yai 
+         ssue URL encoding ka hai. Jab aap slug ya title me "C++" bhej rahe ho to browser automatically encode kardeta hai:
          
+         + → %2B
+         
+         # → cut ho jata ya encode hota (kyunki # anchor identifier hota hai)
+         
+         Isliye "C++" slug ban ke "c%2B%2B" aa raha hai aur "C#" "c" hi ban jata hai.
+         to mai nai yai line likhi (slug.jsx) mai 
+         const Slug = ({title}) => {
+        const decodedTitle = decodeURIComponent(title);
+               console.log(title);
+               const finalTitle = decodedTitle.split("-").join(" ");
+               return (
+               <div>
+                   <h1>{finalTitle}</h1>
+         </div>
+     
+     phir mai yai poblem face kar raha tha  
+       "Ab aik text yai "Python still dominantly #1 in popularity rankings" likn website mai wo kuch esai dekh raha hai "Python still dominantly" agai dekh hi nahi raha"
+        to iskai lyai article.jsx mai yai line add ki
+        <div className='flex flex-col gap-8'>
+          {
+            bldata.map((item, index)=>(
+              <div key={index}>
+              <Link key={index} href={`/article/${encodeURIComponent(item.title.split(" ").join("-"))}`}>
+              <Card hoverable>
+                <h1 className='capitalize text-2xl font-semibold'>{item.title}</h1>
+              </Card>
+              </Link>
+              </div>
+            ))
+          }
+        </div>
+        href mai changes ki
