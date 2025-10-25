@@ -957,3 +957,27 @@ abhi tak mai nai jitna code likha hai wo console mai dekh raha hai pichal bhi jo
           }
         </div>
         href mai changes ki
+
+69. 🟠 kuch lines ka matlab samjho.
+    
+     -->   const isMongoId = isId(params.id)
+        Yh line check kar rahi hai kai params.id aik valid Mongodb id hai ya nahi.
+        Function isId() ka kaam hota hai verify karna k diy gaya string Mongodb objectt mai hai ya nahi. Agar valid hai to isMongoId ki value true hogi, warna false.      
+
+     -->  const query = (isMongoId ? {_id: params.id} : {title: params.id.split("-").join(" ")});
+        Yh line ternary operator ka use kaar rahi hai 
+        Matlab:
+          Agar isMongoId true hai → to query banegi { _id: params.id }
+              (yaani database mai _id field se search hoga)  
+          Agar MongodB false hai to query banai gi { title: params.id.split("-").join(" ") }
+          (yaani agar id ek title jaisa text hai — jaise "my-blog-post" — to usme dashes ko spaces mai badal kar search karega "my blog post")
+
+     -->  const blogd = await Blog.findOne(query);
+             Yh line database blog collecion sai ek record nikl rahi hai jo uper wali quey sai match karta ho. Result blogd variable mai store ho jata hai.
+
+70. 🟠 SEO rules
+      
+      1. create slug accoding to webpage.
+      2. show slug as heading of webpage.
+      3. show slug as title tag.
+      4. create separate page for specific slug.

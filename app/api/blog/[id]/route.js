@@ -44,9 +44,11 @@ export const DELETE = async (request, { params }) => {
 
 export const GET = async (request, { params }) => {
   try {
-    const id = isId(params.id); // ye check karne kai liye kai id valid hai ya nahi
-    console.log(id);
-    const blogd = await Blog.findById(params.id);
+    const isMongoId = isId(params.id); // ye check karne kai liye kai id valid hai ya nahi
+    // console.log(id);
+    const query = (isMongoId ? {_id: params.id} : {title: params.id.split("-").join(" ")})
+    const blogd = await Blog.findOne(query);
+
     if (!blogd) {
       return NextResponse.json(
         { success: false, message: 'Id not found' },
