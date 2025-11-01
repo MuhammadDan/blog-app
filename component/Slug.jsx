@@ -1,12 +1,13 @@
 import React from 'react'
 
-const Slug = ({title}) => {
+const Slug = ({title, blogdata}) => {
   const decodedTitle = decodeURIComponent(title);
     console.log(title);
     const finalTitle = decodedTitle.split("-").join(" ");
     return (
     <div>
-        <h1>{finalTitle}</h1>
+        <h1 className='font-bold text-2xl'>{finalTitle}</h1>
+        <p>{blogdata.description}</p>
     </div>
   )
 }
