@@ -71,7 +71,7 @@ if(isBlacklist)
 
           </div>
         </nav>
-         <section className="px-[5%] py-[10%]">{children}</section>
+         <section className="">{children}</section>
          <footer className="bg-gray-200 h-[450px] flex items-center justify-center text-3xl">my Footer</footer>
 </>
   )
