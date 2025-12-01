@@ -2,6 +2,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React from 'react'
+import Footer from './Footer'
 
 const menus = [
   {
@@ -72,7 +73,8 @@ if(isBlacklist)
           </div>
         </nav>
          <section className="">{children}</section>
-         <footer className="bg-gray-200 h-[450px] flex items-center justify-center text-3xl">my Footer</footer>
+         {/* <footer className="bg-gray-200 h-[450px] flex items-center justify-center text-3xl">my Footer</footer> */}
+         <Footer />
 </>
   )
 }

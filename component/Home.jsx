@@ -22,10 +22,10 @@ const Home = () => {
 
           {/* Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-            <button className="px-8 py-4 bg-white text-purple-900 font-semibold rounded-full hover:bg-gray-100 transition shadow-lg">
+            <button className="px-8 py-4 bg-white text-purple-900 font-semibold rounded-full hover:bg-black hover:text-white transition shadow-lg">
               Start Reading
             </button>
-            <button className="px-8 py-4 border-2 border-white font-semibold rounded-full hover:bg-white hover:bg-opacity-10 transition">
+            <button className="px-8 py-4 border-2 border-white font-semibold rounded-full hover:bg-black hover:bg-opacity-10 transition">
               Explore Topics
             </button>
           </div>
@@ -49,9 +49,9 @@ const Home = () => {
 
         {/* Right Image */}
         <div className="relative">
-          <div className="bg-white bg-opacity-20 backdrop-blur-lg rounded-3xl p-4 shadow-2xl">
+          <div className="bg-white bg-opacity-20 backdrop-blur-lg rounded-3xl  shadow-2xl">
             <img
-              src="https://images.unsplash.com/photo-1499750310107-5fef28a666f8?w=800&h=800&fit=crop"
+              src="https://recap.codesupply.co/recap/wp-content/uploads/sites/2/2025/08/demo-image-0042-1024x576.webp"
               alt="Person reading on laptop with coffee"
               className="w-80 h-80 lg:w-96 lg:h-96 object-cover rounded-2xl shadow-xl"
             />
