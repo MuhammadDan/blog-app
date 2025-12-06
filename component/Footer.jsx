@@ -72,7 +72,7 @@ const Footer = () => {
         </div>
 
         {/* Bottom Line */}
-        <div className="mt-16 pt-8 border-t border-gray-200 text-center text-sm text-gray-500">
+        <div className="mt-36 pt-8 border-t border-gray-200 text-center text-sm text-gray-500">
           © 2025 ByteCode. All rights reserved.
         </div>
       </div>

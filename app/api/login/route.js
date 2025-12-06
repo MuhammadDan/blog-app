@@ -1,84 +1,97 @@
+// app/api/login/route.js
 import dbConnect from "@/lib/db";
 import UserSchema from "@/schema/user.schema";
 import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { message } from "antd";
 
-// Token generator
-const getToken = (payload) => {
-  if (!process.env.ACCESS_TOKEN_SECRET) {
-    throw new Error("ACCESS_TOKEN_SECRET is not defined in .env.local");
+const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
+const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
+
+// Helper: Generate both tokens
+const generateTokens = (payload) => {
+  if (!ACCESS_TOKEN_SECRET || !REFRESH_TOKEN_SECRET) {
+    throw new Error("JWT secrets are not defined in .env.local");
   }
 
-  const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
-    expiresIn: '7d',
-  });
-  const refreshToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
-    expiresIn: '7d',
-  });
-  return {
-    accessToken,
-    refreshToken,
-  };
+  const accessToken = jwt.sign(payload, ACCESS_TOKEN_SECRET, { expiresIn: "15m" });
+  const refreshToken = jwt.sign(payload, REFRESH_TOKEN_SECRET, { expiresIn: "7d" });
+
+  return { accessToken, refreshToken };
 };
 
 export const POST = async (request) => {
-    try {
-      await dbConnect();
+  try {
+    await dbConnect();
 
-      const {email,password} = await request.json();
-      const user = await UserSchema.findOne({email});
+    const { email, password } = await request.json();
 
-      if(!user){
-        return NextResponse.json(
-          {success: false, message: "User doesn't exist"},
-          {status: 404}
-        );
-      }
-
-    const isLogin = await bcrypt.compare(password, user.password);
-    
-    if(!isLogin){
+    // Find user
+    const user = await UserSchema.findOne({ email }).select("+password"); // include password if select: false in schema
+    if (!user) {
       return NextResponse.json(
-        {success: false, message: "Incorrect password"},
-        {status: 401}
+        { success: false, message: "Invalid email or password" },
+        { status: 401 }
       );
     }
 
-    console.log("STEP 2: email & password received", { email, password });
-    
-    const token = {
-      accessToken: jwt.sign(
-        { fullname: user.fullname, email: user.email},
-        process.env.ACCESS_TOKEN_SECRET,
-        {expiresIn: '15m'}
-      ),
-      refreshToken: jwt.sign(
-        { fullname: user.fullname, email: user.email},
-        process.env.REFRESH_TOKEN_SECRET,
-        {expiresIn: '7d'}
-      ),
-    };
-     const result = NextResponse.json({ success: true,  token}, { status: 200 })
+    // Check password
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return NextResponse.json(
+        { success: false, message: "Invalid email or password" },
+        { status: 401 }
+      );
+    }
 
-    result.cookies.set("accessToken",token.accessToken, {
+    // Payload for JWT
+    const payload = {
+      fullname: user.fullname,
+      email: user.email,
+      // you can add id: user._id if needed later
+    };
+
+    // Generate tokens
+    const { accessToken, refreshToken } = generateTokens(payload);
+
+    // Success response
+    const response = NextResponse.json(
+      {
+        success: true,
+        message: "Login successful",
+        user: {
+          fullname: user.fullname,
+          email: user.email,
+        },
+      },
+      { status: 200 }
+    );
+
+    // Set httpOnly cookies
+    const isProduction = process.env.PROD === "true";
+
+    response.cookies.set("accessToken", accessToken, {
       httpOnly: true,
-      secure: process.env.PROD === "true" ? true : false,
-      path: "/", 
-    })
-    // optional, default is "/"
-    result.cookies.set("refreshoken", token.refreshToken, {
-      httpOnly: true,
-      secure: process.env.PROD === "true"? true : false,
+      secure: isProduction,
+      sameSite: "lax",
       path: "/",
-    })
-    return result;
-  } catch (err){
-    console.error("Error during login:", err);
+      maxAge: 15 * 60, // 15 minutes
+    });
+
+    response.cookies.set("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: "lax",
+      path: "/",
+      maxAge: 7 * 24 * 60 * 60, // 7 days
+    });
+
+    return response;
+  } catch (error) {
+    console.error("Login error:", error);
     return NextResponse.json(
-      {success: false, message: err.message},
-      {status: 500}
+      { success: false, message: "Internal server error" },
+      { status: 500 }
     );
   }
 };
